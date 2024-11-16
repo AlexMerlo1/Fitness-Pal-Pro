@@ -1,0 +1,62 @@
+.challenge-container {
+  background: linear-gradient(#007DFB, #004080);
+  padding: 3%;
+  border-radius: 20px;
+  filter: drop-shadow(0 0 0.5rem black);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 400px;
+  margin: auto;
+}
+
+.challenge-info {
+  text-align: center;
+  color: white;
+}
+
+.text-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  padding: 5px 10px;
+  margin-bottom: 10px;
+}
+
+.competition-duration {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #F2A900;
+  margin: 5px 0;
+}
+
+.competition-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+.challenge-description {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+.participants-count {
+  font-size: 1rem;
+  color: #F2A900;
+  margin: 5px 0;
+}
+
+.join-button {
+  background-color: #F2A900;
+  color: #004080;
+  font-size: 1rem;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.join-button:hover {
+  background-color: #F2A900;
+}
