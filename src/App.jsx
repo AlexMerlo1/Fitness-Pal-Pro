@@ -5,6 +5,7 @@ import RegisterForm from './components/RegisterForm/RegisterForm';
 import WorkoutPlans from './components/WorkoutPlans/WorkoutPlans';
 import GoalsForm from './components/GoalsPage/GoalsForm';
 import HomePage from './components/HomePage/HomePage';
+import CompetitionsPage from './components/CompetitionsPage/CompetitionsPage';
 const App = () => {
     return (
         <>
@@ -15,6 +16,7 @@ const App = () => {
                     <Route path="/WorkoutPlans" element={<WorkoutPlans />} />
                     <Route path="/Goals" element={<GoalsForm />} />
                     <Route path="/Home" element={<HomePage />} />
+                    <Route path="/Competitions" element={<CompetitionsPage />} />
                 </Routes>
             </Router>
         </>
