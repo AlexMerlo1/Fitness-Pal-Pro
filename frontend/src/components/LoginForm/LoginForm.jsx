@@ -1,37 +1,57 @@
 import React, { useState } from 'react';
-import './LoginForm.css';
+import './LoginForm.css'; 
 import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  
+  const [success, setSuccess] = useState(''); // Success message
+
   const navigate = useNavigate();
 
-  // Mock credentials
-  const validCredentials = {
-    email: 'test@example.com',
-    password: 'password123'
-  };
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-  const handleSubmit = (event) => {
-    event.preventDefault(); 
+    // Clear previous errors
+    setError('');
+    setSuccess(''); // Clear success message when submitting
 
     if (!email || !password) {
       setError('Please enter both email and password');
       return;
     }
 
-    // Mock validation
-    if (email === validCredentials.email && password === validCredentials.password) {
-      setError('');
-      console.log(`Logged in as: ${email}`);
+    try {
+      // Send login request to flask api
+      const response = await fetch('http://localhost:5000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-      // Successful login
-      navigate('/home');
-    } else {
-      setError('Invalid email or password');
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccess('Login successful!'); // Set success message
+        setError('');
+        setEmail(''); // Clear email field
+        setPassword(''); // Clear password field
+
+        // Store the token in localStorage
+        localStorage.setItem('token', data.token);
+
+        // Redirect to home page
+        navigate('/home');
+      } else {
+        setError(data.message || 'An error occurred');
+        setSuccess('');
+      }
+    } catch (err) {
+      setError('Failed to login. Please try again.');
+      setSuccess('');
     }
   };
 
@@ -40,19 +60,20 @@ const LoginForm = () => {
       <form onSubmit={handleSubmit}>
         <h1>Login</h1>
         {error && <p className="error-message">{error}</p>}
+        {success && <p className="success-message">{success}</p>} {/* Display success message */}
         <div className='input-box'>
-          <input 
-            type='text' 
-            placeholder='Email' 
+          <input
+            type='email'
+            placeholder='Email'
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
         </div>
         <div className='input-box'>
-          <input 
-            type='password' 
-            placeholder='Password' 
+          <input
+            type='password'
+            placeholder='Password'
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
