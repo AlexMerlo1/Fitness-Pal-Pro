@@ -1,180 +1,145 @@
-  /* body {
-    background-color: black;
-  }
-   */
-   .competitions-container {
-    width: 100%;
-    display: grid;
-    position: relative;
-  }
+/* body {
+  background-color: black;
+}
+*/
+.competitions-container {
+  width: 100%;
+  display: grid;
+  position: relative;
+}
 
-  .top-bar{
-    height: 100px;
-  }
+.top-bar {
+  height: 100px;
+}
 
-  .top-bar h1{
-    color: white;
-    text-align: left;
-  }
+.top-bar h1 {
+  color: white;
+  text-align: left;
+}
 
-  .comp-info {
-    background-color: #1F262E;
-    display: inline-flex;
-    width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-  }
+.comp-info {
+  background-color: #1F262E;
+  display: inline-flex;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
 
-  .competition-cards {
-    display: grid;
-    gap: 10px;
-    margin-top: 10px;
-    width: 40%;
-    max-width: 400px;
-    max-height: 600px;
-    overflow-y: auto;
-    scroll-margin-left: 20px;
-    margin-left: auto;
-  }
+.competition-cards {
+  display: grid;
+  gap: 10px;
+  margin-top: 10px;
+  width: 40%;
+  max-width: 400px;
+  max-height: 600px;
+  overflow-y: auto;
+  scroll-margin-left: 20px;
+  margin-left: auto;
+}
 
-  .competition-details {
-    width: 40%;
-    color: #FFFFFF;
-    margin: 10px;
-    overflow-y: auto;
-    max-height: 600px;
-    padding-left:5px;
-    padding-right:5px;
-    max-width: 400px;
-    margin-right: auto;
-  }
+.competition-details {
+  width: 40%;
+  color: #FFFFFF;
+  margin: 10px;
+  overflow-y: auto;
+  max-height: 600px;
+  padding-left:5px;
+  padding-right:5px;
+  max-width: 400px;
+  margin-right: auto;
+}
 
-  .competition-card {
-    font-size: 16px;
-    text-align: left;
-    padding: 20px;
-    margin-right: 5px;
-    background-color: #2A313B;
-    border-radius: 8px;
-    color: #FFFFFF;
-    border: none;
-  }
-  
-  .competition-card:hover {
-    font-size: 16px;
-    text-align: left;
-    padding: 20px;
-    background-color: #4D5B6B;
-    color: #ffffff;
-    border: none;
-    cursor: pointer;
-  }
+.competition-card {
+  font-size: 16px;
+  text-align: left;
+  padding: 20px;
+  margin-right: 5px;
+  background-color: #2A313B;
+  border-radius: 8px;
+  color: #FFFFFF;
+  border: none;
+}
 
-  /* option {
-    color: blue;
-    background-color: black;
-  } */
+.competition-card:hover {
+  font-size: 16px;
+  text-align: left;
+  padding: 20px;
+  background-color: #4D5B6B;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+}
 
-  /* .competition-card:active {
-    background-color: #3c7fcb;
-    color: white;
-    outline: none;
-  } */
-  
-  /* .toggle-btn {
-    width: 100px;
-    height: 40px;
-    background-color: lightgray;
-    border: none;
-    border-radius: 20px;
-    color: black;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
+.leaderboard {
+  background-color: #2A313B;
+  border-radius: 8px;
+  width: 100%;
+  color: #FFFFFF;
+  text-align: center;
+}
 
-  .toggle-btn[selected] {
-    background-color: blue;
-    color: white;
-  } */
-  
+.table {
+  table-layout: fixed;
+  width: 100%;
+}
 
-  /* .competition-header {
-    max-width: 100%;
-  } */
+th {
+  color: #FFFFFF;
+  text-align: left;
+  width: 1%
+}
 
-  .leaderboard {
-    background-color: #2A313B;
-    border-radius: 8px;
-    width: 100%;
-    color: #FFFFFF;
-    text-align: center;
-  }
+td {
+  color: #FFFFFF;
+  text-align: center;
+}
 
-  .table {
-    table-layout: fixed;
-    width: 100%;
-  }
+.rewards {
+  background-color: #2A313B;
+  border-radius: 8px;
+  width: 100%;
+  color: #FFFFFF;
+  text-align: center;
+}
 
-  th{
-    color: #FFFFFF;
-    text-align: left;
-    width: 1%
-  }
+.competition-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-  td{
-    color: #FFFFFF;
-    text-align: center;
-  }
+.join-button {
+  padding: 5px 15px;
+  background-color: #F2A900;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
 
-  .rewards {
-    background-color: #2A313B;
-    border-radius: 8px;
-    width: 100%;
-    color: #FFFFFF;
-    text-align: center;
-  }
+.join-button:hover {
+  background-color: #007DFB;
+}
 
-  .competition-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .join-button {
-    padding: 5px 15px;
-    background-color: #007DFB;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .date-range {
-    font-size: 14px;
-    color: #b0b0b0;
-    margin: 10px 0;
-  }
-  
-  .leaderboard, .rewards {
-    margin-top: 15px;
-  }
+.leaderboard, .rewards {
+  margin-top: 15px;
+}
 
-  /* width */
+/* width */
 ::-webkit-scrollbar {
-  width: 12px;
+width: 12px;
 }
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #2A313B;
-  border-radius: 10px;
+background: #2A313B;
+border-radius: 10px;
 }
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #4D5B6B;
-  border-radius: 10px;
+background: #4D5B6B;
+border-radius: 10px;
 }
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #6e8299;
+background: #6e8299;
 }
-  

@@ -7,7 +7,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #1e1e2f;
+    background-color: #1F262E;
     color: #fff;
     height: 100vh;
   }
@@ -16,7 +16,7 @@ body {
     width: 100%;
     height: 150px;
     padding: 20px;
-    background-color: #2b2b3b;
+    background-color: #2A313B;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -57,7 +57,7 @@ body {
     position: absolute;
     top: 140px;
     right: 20px;
-    background-color: #333344;
+    background-color: #2A313B;
     border-radius: 10px;
     padding: 10px;
     color: white;
@@ -77,7 +77,7 @@ body {
   }
   
   .dropdown-menu li:hover {
-    background-color: #444455;
+    background-color: #6e8299;
   }
   
   .workout-container {
@@ -94,7 +94,7 @@ body {
   }
   
   .workout-plan {
-    background-color: #333344;
+    background-color: #2A313B;
     padding: 20px;
     border-radius: 10px;
     text-align: center;
@@ -113,7 +113,7 @@ body {
   
   .workout-log {
     flex: 1;
-    background-color: #333344;
+    background-color: #2A313B;
     margin-left: 20px;
     padding: 20px;
     border-radius: 10px;
@@ -133,7 +133,7 @@ body {
   }
   
   .popup-content {
-    background-color: #333344;
+    background-color: #2A313B;
     padding: 20px;
     border-radius: 10px;
     text-align: center;
