@@ -1,3 +1,4 @@
+
 /* Container for the entire page */
 .home-page-container {
   width: 100vw;
@@ -5,7 +6,6 @@
   background-color: #1F262E; 
   color: #FFFFFF;
 }
-
 /* Top bar container */
 .top-bar {
   display: flex;
@@ -15,13 +15,11 @@
   border-radius: 8px;
   justify-content: flex-end;
 }
-
 /* Container for navigation buttons */
 .buttons {
   display: flex;
   gap: 5%;
 }
-
 /* Navigation button styles */
 .navigation {
   background-color: #2A313B;
@@ -36,11 +34,9 @@
   cursor: pointer;
   width: 250px;
 }
-
 .navigation:hover {
   background-color: #3A3F4A;
 }
-
 /* Current balance display */
 .current-balance {
   background-color: #F2A900;
@@ -57,7 +53,6 @@
   width: 250px;
   font-weight: bold;
 }
-
 /* Settings icon area */
 .settings {
   background-color: #2A313B;
@@ -74,7 +69,6 @@
   width: 250px;
   font-weight: bold;
 }
-
 /* Left Side Content */
 .main-content-left {
   display: flex;
@@ -82,7 +76,6 @@
   margin-left: 2%;
   width: 50%;
 }
-
 .competitions-large-container h1,
 .workout-large-container h1 {
   color: #FFFFFF;
@@ -90,7 +83,6 @@
   text-align: left;
   margin: 0;
 }
-
 .common-container {
   display: flex;
   flex-wrap: wrap;
@@ -101,7 +93,6 @@
   padding-top: 1rem;
   border-radius: 20px;
 }
-
 .character-environment {
   background-color: #1F262E;
   padding: 20px;
@@ -110,17 +101,80 @@
   color: #FFFFFF;
   text-align: center;
 }
-
 .milestones-contain {
   display: flex;
   gap: 15px;
   margin-top: 20px;
 }
-
 .avatar-container {
   width: 150px;
   height: 150px;
   background-color: #1F262E;
   border-radius: 50%;
   margin: 20px auto;
+}
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.popup-container {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 50%;
+  height: 75%;
+  text-align: center;
+  position: relative;
+}
+
+h2 {
+  color: black;
+}
+h3 {
+  color: black;
+}
+.friends-list {
+  list-style: none;
+  padding: 0;
+  color: black;
+}
+.friend-item {
+  margin: 10px 0;
+  font-size: 1.2em;
+}
+.close-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 30px; 
+  height: 30px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%; 
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2em; 
+  font-weight: bold;
+  text-align: center;
+}
+.close-button:hover {
+  background-color: #0056b3;
+}
+.header {
+  position: relative;
+  background-color: white;
+}
+.header h2{
+  margin: 0; 
+  text-align: left;
 }
