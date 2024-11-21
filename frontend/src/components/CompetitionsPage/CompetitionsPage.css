@@ -1,20 +1,85 @@
-/* body {
-  background-color: black;
+body {
+  color: white;
 }
-*/
+
 .competitions-container {
   width: 100%;
   display: grid;
   position: relative;
 }
 
-.top-bar {
-  height: 100px;
-}
-
-.top-bar h1 {
+.the-header h1 {
   color: white;
   text-align: left;
+}
+
+.the-header {
+  width: 100%;
+  height: 150px;
+  padding: 20px;
+  background-color: #2A313B;
+  display: flex;
+  /* justify-content: space-between; */
+  /* align-items: center; */
+  /* position: relative; */
+}
+
+.menubar-div {
+  display: flex;
+  margin-left: auto;
+  margin-right:0;
+}
+
+.logo-button {
+  width: 100px;
+  height: 100px;
+  background-color: #ffb300;
+  border-radius: 50%;
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+
+.header h1 {
+  padding: 10px 20px;
+  margin: 0;
+}
+
+.profile-button {
+  width: 100px;
+  height: 100px;
+  background-color: #ffb300;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 140px;
+  right: 20px;
+  background-color: #2A313B;
+  border-radius: 10px;
+  padding: 10px;
+  color: white;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.dropdown-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.dropdown-menu li {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.dropdown-menu li:hover {
+  background-color: #6e8299;
 }
 
 .comp-info {

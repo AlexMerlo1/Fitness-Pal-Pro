@@ -1,12 +1,54 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './CompetitionsPage.css'
 
 const CompetitionsPage2 = () => {
+
+    const [dropdownVisible, setDropdownVisible] = useState(false);
+    const toggleDropdown = () => {
+        setDropdownVisible(!dropdownVisible);
+      };
+    const openHomePage = () => {
+        window.open("http://localhost:3000/home");
+    };
+    const openWorkoutsPage = () => {
+        window.open("http://localhost:3000/workoutplans");
+    };
+    const openCompetitionsPage = () => {
+        window.open("http://localhost:3000/Competitions");
+    };
+    const openMilestonesPage = () => {
+        window.open("http://localhost:3000/goals");
+    };
+    const openFriendsPage = () => {
+        window.open("http://localhost:3000/home");
+    };
+
+
   return (
     <div class="competitions-container">
-        <div class='top-bar'>
-            <h1>Competitions</h1>
-        </div>
+        <header className="the-header">
+            <div className="logo-div" >
+                <div className="logo-button" onClick={openHomePage}></div>
+                <div className="logo-name" onlick={openHomePage}>Fitness Pal Pro</div>
+            </div>
+            <div className="menubar-div" >
+                <div className="menu-button" onlick={openWorkoutsPage}>Workouts</div>
+                <div className="menu-button" onlick={openCompetitionsPage}>Competitions</div>
+                <div className="menu-button" onlick={openMilestonesPage}>Milestones</div>
+                <div className="menu-button" onlick={openFriendsPage}>Friends</div>
+                <div className="profile-button" onClick={toggleDropdown}></div>
+            </div>
+            {dropdownVisible && (
+            <div className="dropdown-menu">
+                <ul>
+                <li>View Profile</li>
+                <li>Settings</li>
+                <li>Log Out</li>
+                </ul>
+            </div>
+            )}
+        </header>
+
         <div class="comp-info">
             <div class="competition-cards">
                 <button class="competition-card">Max Bench</button>
