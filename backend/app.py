@@ -107,6 +107,14 @@ def add_friend():
         except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
             return jsonify({"message": "Invalid or expired token!"}), 401
         
+        # Retrieve the user details based on user_id
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"message": "User not found!"}), 404
+        
+        # Get the username associated with the user_id
+        username = user.username
+        
         data = request.get_json()
         if not data:
             return jsonify({"message": "No data provided"}), 400
@@ -127,8 +135,12 @@ def add_friend():
         if existing_friendship:
             return jsonify({"message": "Friendship already exists"}), 400
         
-        # Create a new friendship record
-        new_friendship = user_friends(user_id=user_id, friend_id=friend_id, status='pending')
+        # Create a new friendship record with the associated username
+        new_friendship = user_friends(
+            user_id=username, 
+            friend_id=friend_id, 
+            status='pending',
+        )
         db.session.add(new_friendship)
         db.session.commit()
 
@@ -137,6 +149,7 @@ def add_friend():
         print(f"Error during adding friend: {e}")
         print(traceback.format_exc())
         return jsonify({"message": "Internal server error"}), 500
+
 
 @app.route('/login', methods=['POST'])
 def login():
