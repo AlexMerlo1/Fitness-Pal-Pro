@@ -3,6 +3,7 @@ import './CompetitionsPage.css'
 
 const CompetitionsPage2 = () => {
 
+    // for top menu bar
     const [dropdownVisible, setDropdownVisible] = useState(false);
     const toggleDropdown = () => {
         setDropdownVisible(!dropdownVisible);
@@ -22,24 +23,27 @@ const CompetitionsPage2 = () => {
     const openFriendsPage = () => {
         window.open("http://localhost:3000/home");
     };
+    // end of top menu bar
 
 
   return (
     <div class="competitions-container">
+        
+        {/* for top menu bar */}
         <header className="the-header">
             <div className="logo-div" >
                 <div className="logo-button" onClick={openHomePage}></div>
-                <div className="logo-name" onlick={openHomePage}>Fitness Pal Pro</div>
+                <div className="logo-name" onClick={openHomePage}>Fitness Pal Pro</div>
             </div>
             <div className="menubar-div" >
-                <div className="menu-button" onlick={openWorkoutsPage}>Workouts</div>
-                <div className="menu-button" onlick={openCompetitionsPage}>Competitions</div>
-                <div className="menu-button" onlick={openMilestonesPage}>Milestones</div>
-                <div className="menu-button" onlick={openFriendsPage}>Friends</div>
-                <div className="profile-button" onClick={toggleDropdown}></div>
+                <div className="menu-button" onClick={openWorkoutsPage}>Workouts</div>
+                <div className="menu-button" onClick={openCompetitionsPage}>Competitions</div>
+                <div className="menu-button" onClick={openMilestonesPage}>Milestones</div>
+                <div className="menu-button" onClick={openFriendsPage}>Friends</div>
+                <div className="the-profile-button" onClick={toggleDropdown}></div>
             </div>
             {dropdownVisible && (
-            <div className="dropdown-menu">
+            <div className="the-dropdown-menu">
                 <ul>
                 <li>View Profile</li>
                 <li>Settings</li>
@@ -48,6 +52,7 @@ const CompetitionsPage2 = () => {
             </div>
             )}
         </header>
+        {/* end of top menu bar */}
 
         <div class="comp-info">
             <div class="competition-cards">
