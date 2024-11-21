@@ -20,6 +20,21 @@ class User(db.Model):
     password = db.Column(db.String, nullable=False)
     role = db.Column(db.Integer, default=1)  # Regular user = role 1
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    # Relationships
+    friends = db.relationship('user_friends', foreign_keys='user_friends.user_id', backref='user', lazy=True)
+    friends_of = db.relationship('user_friends', foreign_keys='user_friends.friend_id', backref='friend', lazy=True)
+
+class user_friends(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    friend_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    status = db.Column(db.String, default='pending')
+    freind_request_sent = db.Column(db.DateTime, default=datetime.utcnow)
+    friend_request_accepted = db.Column(db.DateTime, nullable=True)
+    __table_args__ = (
+        db.UniqueConstraint('user_id', 'friend_id', name='unique_friendship'),
+    )
+
 @app.before_request
 def create_tables():
     db.create_all()
@@ -54,6 +69,75 @@ def register():
         print(f"Error during registration: {e}")
         print(traceback.format_exc())  
         return jsonify({"message": "Internal server error"}), 500
+@app.route('/search_friends', methods=['GET'])
+def search_friends():
+    try:
+        search_term = request.args.get('search')  # Get the search term from query params
+        if not search_term:
+            return jsonify({"message": "Search term is required"}), 400
+        
+        # Query users whose username matches the search term
+        users = User.query.filter(User.username.ilike(f"%{search_term}%")).all()
+        
+        # Return only the usernames in the response
+        friends = [{"id": user.id, "username": user.username} for user in users]
+        
+        return jsonify({"friends": friends}), 200
+    except Exception as e:
+        print(f"Error during search: {e}")
+        print(traceback.format_exc())
+        return jsonify({"message": "Internal server error"}), 500
+
+from flask import request, jsonify
+import jwt
+
+@app.route('/add_friend', methods=['POST'])
+def add_friend():
+    try:
+        # Extract the JWT token from the Authorization header
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({"message": "Token is missing!"}), 401
+        
+        # Decode the token to get the user_id
+        try:
+            token = token.split(" ")[1]  # Get the token from 'Bearer <token>'
+            decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+            user_id = decoded_token['user_id']
+        except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
+            return jsonify({"message": "Invalid or expired token!"}), 401
+        
+        data = request.get_json()
+        if not data:
+            return jsonify({"message": "No data provided"}), 400
+        
+        friend_id = data.get('friend_id')  # Friend's ID to be added
+        
+        if not friend_id:
+            return jsonify({"message": "Friend ID is required"}), 400
+
+        if user_id == friend_id:
+            return jsonify({"message": "You cannot add yourself as a friend"}), 400
+        
+        # Check if the friendship already exists
+        existing_friendship = user_friends.query.filter(
+            (user_friends.user_id == user_id) & (user_friends.friend_id == friend_id)
+        ).first()
+
+        if existing_friendship:
+            return jsonify({"message": "Friendship already exists"}), 400
+        
+        # Create a new friendship record
+        new_friendship = user_friends(user_id=user_id, friend_id=friend_id, status='pending')
+        db.session.add(new_friendship)
+        db.session.commit()
+
+        return jsonify({"message": "Friend request sent successfully!"}), 201
+    except Exception as e:
+        print(f"Error during adding friend: {e}")
+        print(traceback.format_exc())
+        return jsonify({"message": "Internal server error"}), 500
+
 @app.route('/login', methods=['POST'])
 def login():
     try:
@@ -80,8 +164,9 @@ def login():
         print(f"Error during login: {e}")
         print(traceback.format_exc()) 
         return jsonify({"message": "Internal server error", "error": str(e)}), 500
-from app import db
-from app import User
+from app import db, user_friends
+print(db.inspect(user_friends).columns.keys())  # This will list all columns in the 'user_friends' table
+
 print(db.inspect(User).columns.keys())  
 if __name__ == '__main__':
     db.create_all()  
