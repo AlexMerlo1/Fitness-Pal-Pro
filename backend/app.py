@@ -202,6 +202,50 @@ def get_pending_friend_requests():
         print(f"Error during fetching pending requests: {e}")
         return jsonify({"message": "Internal server error"}), 500
 
+@app.route("/accept_friend_request", methods=["POST"])
+def accept_friend_request():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"message": "No data provided!"}), 400
+        
+        user_username = data.get('user_username')
+        requestor_username = data.get('requestor_username')
+        print(user_username, requestor_username)
+        if not user_username or not requestor_username:
+            return jsonify({"message": "Missing required fields!"}), 400
+        
+        friend_request = user_friends.query.filter_by(
+            user_id=user_username,
+            friend_id=requestor_username
+        ).first()
+
+        if not friend_request:
+            return jsonify({"message": "Friend request not found!"}), 404
+        
+        # Query for the reverse friendship (requestor -> user)
+        reverse_friend_request = user_friends.query.filter_by(
+            user_id=requestor_username,
+            friend_id=user_username
+        ).first()
+
+        # If the reverse entry exists, remove it
+        if reverse_friend_request:
+            db.session.delete(reverse_friend_request)
+        
+        # Update the status of the original friend request to "Accepted"
+        friend_request.status = "Accepted"
+        
+        # Commit the changes to the database
+        db.session.commit()
+        
+        return jsonify({"message": "Friend request accepted and reverse entry removed!"}), 200
+
+    except Exception as e:
+        db.session.rollback()  # Rollback in case of error
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route('/login', methods=['POST'])
 def login():
     try:
