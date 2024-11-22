@@ -104,7 +104,7 @@ function Workouts() {
   return (
     <div className="WorkoutPage">
       
-      <TopBar />
+      <TopBar workoutClass="ActiveTab"/>
 
       <h1>This is The Workouts Page</h1>
 

@@ -6,7 +6,7 @@ const HomePage = () => {
 
   return (
     <div className='homepage-container'>
-      <TopBar/>
+      <TopBar titleClass="ActiveTitle"/>
       <h1>This is The Home Page</h1>
     </div>
   );

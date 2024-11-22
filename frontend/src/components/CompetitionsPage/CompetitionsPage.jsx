@@ -9,7 +9,8 @@ const CompetitionsPage2 = () => {
   return (
     <div class="competitions-container">
         
-        <TopBar />
+        <TopBar compClass="ActiveTab"/>
+
 
         <h1>This is The Competitions Page</h1>
 

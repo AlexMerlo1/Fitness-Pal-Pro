@@ -8,10 +8,7 @@ const Profile = () => {
 
   return (
     <div className='goals-container'>
-
-      <TopBar />
-
-
+      <TopBar profileClass="ActiveProfile"/>
       <h1>This is The Profile Page</h1>
     </div>
   );

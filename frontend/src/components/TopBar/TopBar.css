@@ -20,8 +20,8 @@
   padding: 20px;
   background-color: #2A313B;
   display: flex;
-  border-bottom-left-radius: 20px;
-  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
 }
 .logo-div {
   display: flex;
@@ -56,6 +56,18 @@
   cursor: pointer;
   font-size: 20px;
 }
+
+.ActiveTab {
+  font-weight: Bold;
+  text-decoration: Underline;
+}
+.ActiveTitle {
+  font-weight: Bold;
+}
+.ActiveProfile {
+  display:none;
+}
+
 .the-profile-button {
   margin-left: 10px;
   width: 50px;

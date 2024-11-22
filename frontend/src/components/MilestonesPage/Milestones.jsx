@@ -10,7 +10,7 @@ const Milestones = () => {
   
   return (
     <div className='goals-container'>
-      <TopBar />
+      <TopBar milestonesClass="ActiveTab"/>
       <h1>This is The Milestones Page</h1>
     </div>
   );

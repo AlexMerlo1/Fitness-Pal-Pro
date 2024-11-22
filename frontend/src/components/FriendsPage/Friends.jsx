@@ -7,7 +7,7 @@ const Friends = () => {
 
   return (
     <div className='goals-container'>
-      <TopBar />
+      <TopBar friendsClass="ActiveTab"/>
       <h1>This is The Friends Page</h1>
     </div>
   );

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './TopBar.css';
 
-const TopBar = () => {
+function TopBar({titleClass, workoutClass, compClass, milestonesClass, friendsClass, profileClass}) {
 
   // for top menu bar
   const [dropdownVisible, setDropdownVisible] = useState(false);
@@ -34,14 +34,14 @@ const TopBar = () => {
       <header className="the-header">
         <div className="logo-div" >
             <div className="logo-button" onClick={openHomePage}></div>
-            <div className="logo-name" onClick={openHomePage}>Fitness Pal Pro</div>
+            <div className={`logo-name ${titleClass}`} onClick={openHomePage}>Fitness Pal Pro</div>
         </div>
         <div className="menubar-div" >
-            <div className="menu-button" onClick={openWorkoutsPage}>Workouts</div>
-            <div className="menu-button" onClick={openCompetitionsPage}>Competitions</div>
-            <div className="menu-button" onClick={openMilestonesPage}>Milestones</div>
-            <div className="menu-button" onClick={openFriendsPage}>Friends</div>
-            <div className="the-profile-button" onClick={openProfilePage}></div>
+            <div class={`menu-button ${workoutClass}`} onClick={openWorkoutsPage}>Workouts</div>
+            <div class={`menu-button ${compClass}`} onClick={openCompetitionsPage}>Competitions</div>
+            <div class={`menu-button ${milestonesClass}`} onClick={openMilestonesPage}>Milestones</div>
+            <div class={`menu-button ${friendsClass}`} onClick={openFriendsPage}>Friends</div>
+            <div class={`the-profile-button ${profileClass}`} onClick={openProfilePage}></div>
         </div>
         {dropdownVisible && (
         <div className="the-dropdown-menu">
