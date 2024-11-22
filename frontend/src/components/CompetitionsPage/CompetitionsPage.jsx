@@ -33,7 +33,7 @@ const CompetitionsPage2 = () => {
         <header className="the-header">
             <div className="logo-div" >
                 <div className="logo-button" onClick={openHomePage}></div>
-                <div className="logo-name" onClick={openHomePage}>Fitness Pal Pro</div>
+                <div className="logo-name" onClick={openHomePage}>Lift Ledger</div>
             </div>
             <div className="menubar-div" >
                 <div className="menu-button" onClick={openWorkoutsPage}>Workouts</div>

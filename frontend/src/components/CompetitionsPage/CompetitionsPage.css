@@ -1,12 +1,21 @@
+:root {
+  --darkgray: #1F262E;
+  --lightgray: #2A313B;
+  --lightblue: #007DFB;
+  --darkblue: #004080;
+  --yellow: #F2A900;
+}
+
 body {
   color: white;
-  background-color: #1F262E;
+  background-color: var(--darkgray);
 }
 
 .competitions-container {
   width: 100%;
-  display: grid;
-  position: relative;
+  height: 100vh;
+  background-color: var(--darkgray);
+
 }
 
 /* for top menu bar */
@@ -14,7 +23,7 @@ body {
   width: 100%;
   height: 100px;
   padding: 20px;
-  background-color: #2A313B;
+  background-color: var(--lightgray);
   display: flex;
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
@@ -32,7 +41,10 @@ body {
 .logo-button {
   width: 50px;
   height: 50px;
-  background-color: #ffb300;
+  background-image: url("/Users/benbraniff/Documents/GitHub/Fitness-Pal-Pro/frontend/src/assets/Fitness Pal Pro logo 2.png");
+  background-position: center;
+  background-size: 50px 50px;
+  /* background-color: var(--yellow); */
   border-radius: 50%;
   cursor: pointer;
 }
@@ -53,7 +65,10 @@ body {
   margin-left: 10px;
   width: 50px;
   height: 50px;
-  background-color: #ffb300;
+  background-image: url("/Users/benbraniff/Documents/GitHub/Fitness-Pal-Pro/frontend/src/assets/profile-icon-png-898.png");
+  background-position: center;
+  background-size: 50px 50px;
+  background-color: #c4c4c4;
   border-radius: 50%;
   cursor: pointer;
 }
@@ -61,7 +76,7 @@ body {
   position: absolute;
   top: 100px;
   right: 0px;
-  background-color: #2A313B;
+  background-color: var(--lightgray);
   border-bottom-right-radius: 10px;
   border-bottom-left-radius: 10px;
   padding: 10px;
@@ -85,7 +100,6 @@ body {
 
 
 .comp-info {
-  background-color: #1F262E;
   display: inline-flex;
   width: 100%;
   margin-left: auto;
@@ -121,7 +135,7 @@ body {
   text-align: left;
   padding: 20px;
   margin-right: 5px;
-  background-color: #2A313B;
+  background-color: var(--lightgray);
   border-radius: 8px;
   color: #FFFFFF;
   border: none;
@@ -138,7 +152,7 @@ body {
 }
 
 .leaderboard {
-  background-color: #2A313B;
+  background-color: var(--lightgray);
   border-radius: 8px;
   width: 100%;
   color: #FFFFFF;
@@ -162,7 +176,7 @@ td {
 }
 
 .rewards {
-  background-color: #2A313B;
+  background-color: var(--lightgray);
   border-radius: 8px;
   width: 100%;
   color: #FFFFFF;
@@ -177,7 +191,7 @@ td {
 
 .join-button {
   padding: 5px 15px;
-  background-color: #F2A900;
+  background-color: var(--yellow);
   color: #ffffff;
   border: none;
   border-radius: 5px;
@@ -185,7 +199,7 @@ td {
 }
 
 .join-button:hover {
-  background-color: #007DFB;
+  background-color: var(--lightblue);
 }
 
 .leaderboard, .rewards {
@@ -198,7 +212,7 @@ width: 12px;
 }
 /* Track */
 ::-webkit-scrollbar-track {
-background: #2A313B;
+background: var(--lightgray);
 border-radius: 10px;
 }
 /* Handle */
