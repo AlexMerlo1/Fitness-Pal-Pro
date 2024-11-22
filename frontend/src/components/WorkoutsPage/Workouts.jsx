@@ -150,6 +150,8 @@ function Workouts() {
       </header>
       {/* end of top menu bar */}
 
+      <h1>This is The Workouts Page</h1>
+
       <div className="workout-container">
         <div className="workout-plans">
           {[1, 2, 3, 4, 5, 6].map((number) => (

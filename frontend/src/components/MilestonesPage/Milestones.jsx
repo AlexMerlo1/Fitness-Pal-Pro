@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
-import ChallengeTab from './components/ChallengeTab/ChallengeTab';
-import WorkoutTab from './components/WorkoutTab/WorkoutTab';
-import MilestoneTabs from './components/MilestoneTabs/MilestoneTabs';
-import { FaUserFriends, FaCalendar, FaStore, FaEllipsisH } from 'react-icons/fa';
-import './HomePage.css';
+import './Milestones.css';
+import { FaArrowRight } from 'react-icons/fa';
 
-const HomePage = () => {
-
+const Milestones = () => {
   // for top menu bar
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const toggleDropdown = () => {
@@ -16,22 +12,23 @@ const HomePage = () => {
       window.open("http://localhost:3000/home");
   };
   const openWorkoutsPage = () => {
-      window.open("http://localhost:3000/workoutplans");
+      window.open("http://localhost:3000/workouts");
   };
   const openCompetitionsPage = () => {
       window.open("http://localhost:3000/Competitions");
   };
   const openMilestonesPage = () => {
-      window.open("http://localhost:3000/goals");
+      window.open("http://localhost:3000/Milestones");
   };
   const openFriendsPage = () => {
       window.open("http://localhost:3000/home");
   };
   // end of top menu bar
 
+
   return (
-    <div className='homepage-container'>
-      
+    <div className='goals-container'>
+
       {/* for top menu bar */}
       <header className="the-header">
         <div className="logo-div" >
@@ -54,13 +51,14 @@ const HomePage = () => {
             </ul>
         </div>
         )}
-        </header>
-        {/* end of top menu bar */}
-        
-        <h1>This is The Home Page</h1>
+      </header>
+      {/* end of top menu bar */}
+
+      <h1>This is The Milestones Page</h1>
+
 
     </div>
   );
-}
+};
 
-export default HomePage;
+export default Milestones;

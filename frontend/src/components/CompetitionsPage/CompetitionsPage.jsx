@@ -54,6 +54,8 @@ const CompetitionsPage2 = () => {
         </header>
         {/* end of top menu bar */}
 
+        <h1>This is The Competitions Page</h1>
+
         <div class="comp-info">
             <div class="competition-cards">
                 <button class="competition-card">Max Bench</button>
