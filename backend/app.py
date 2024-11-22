@@ -150,6 +150,57 @@ def add_friend():
         print(traceback.format_exc())
         return jsonify({"message": "Internal server error"}), 500
 
+@app.route('/notifications', methods=['GET'])
+def get_pending_friend_requests():
+    try:
+        # Extract the JWT token from the Authorization header
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({"message": "Token is missing!"}), 401
+        
+        # Decode the token to get the user_id
+        try:
+            token = token.split(" ")[1]  # Get the token from 'Bearer <token>'
+            decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+            user_id = decoded_token['user_id']
+        except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
+            return jsonify({"message": "Invalid or expired token!"}), 401
+        
+        # Retrieve the user details based on user_id
+        user = User.query.get(user_id)
+        if user is not None:
+            user_username = user.username
+        if not user:
+            return jsonify({"message": "User not found!"}), 404
+        
+        # Query all pending friend requests where the current user is the recipient
+        pending_requests = user_friends.query.filter_by(
+            friend_id=user_username, 
+            status="pending"
+        ).all()
+        if not pending_requests:
+            return jsonify({"message": "No pending friend requests"}), 200
+        
+        for req in pending_requests:
+            print(f"Request ID: {req.user_id}, Friend ID: {req.friend_id}, Status: {req.status}")
+
+        
+        # Format the data for the response
+        pending_requests_list = [
+            {
+                "user_id": req.user_id,  # Requesters username
+                "friend_id": req.friend_id,  # The friend username of the current request
+                "status": req.status, 
+                "type": "friend-request",
+            }
+            for req in pending_requests
+        ]
+
+        return jsonify({"pending_requests": pending_requests_list}), 200
+
+    except Exception as e:
+        print(f"Error during fetching pending requests: {e}")
+        return jsonify({"message": "Internal server error"}), 500
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -178,7 +229,7 @@ def login():
         print(traceback.format_exc()) 
         return jsonify({"message": "Internal server error", "error": str(e)}), 500
 from app import db, user_friends
-print(db.inspect(user_friends).columns.keys())  # This will list all columns in the 'user_friends' table
+print(db.inspect(user_friends).columns.keys())  
 
 print(db.inspect(User).columns.keys())  
 if __name__ == '__main__':

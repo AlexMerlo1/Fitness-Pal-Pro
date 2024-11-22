@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ChallengeTab from './components/ChallengeTab/ChallengeTab';
 import WorkoutTab from './components/WorkoutTab/WorkoutTab';
 import MilestoneTabs from './components/MilestoneTabs/MilestoneTabs';
@@ -11,7 +11,17 @@ const HomePage = () => {
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [isNotificationsVisible, setNotificationsVisible] = useState(false);
   const [friends] = useState(['Alice', 'Bob', 'Charlie', 'Diana']); // Example friends list
-  const [notifications] = useState(['Workout Reminder: 5 PM', 'Challenge: New Week Starts Tomorrow', 'Milestone Unlocked!']); // Example notifications
+  const [notifications, setNotifications] = useState([]); // Start with empty notifications
+
+  // Example of dynamically fetching notifications (useEffect simulating fetch)
+  useEffect(() => {
+    const fetchedNotifications = [
+      'Workout Reminder: 5 PM',
+      'Challenge: New Week Starts Tomorrow',
+      'Milestone Unlocked!'
+    ];
+    setNotifications(fetchedNotifications); // Simulate setting fetched notifications
+  }, []);
 
   const togglePopup = () => {
     setPopupVisible(!isPopupVisible);
@@ -62,8 +72,11 @@ const HomePage = () => {
         </div>
         <div className='avatar-container'></div>
       </div>
+
       {isPopupVisible && <FriendsPopup friends={friends} onClose={togglePopup} />}
-      {isNotificationsVisible && <NotificationsPopup notifications={notifications} onClose={toggleNotifications} />}
+      {isNotificationsVisible && (
+        <NotificationsPopup notifications={notifications} onClose={toggleNotifications} />
+      )}
     </div>
   );
 };
