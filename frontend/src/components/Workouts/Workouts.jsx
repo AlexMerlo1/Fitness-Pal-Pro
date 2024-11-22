@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import './WorkoutPlans.css';
+import './Workouts.css';
 
-function WorkoutPlans() {
+function Workouts() {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [showCustomWorkoutPopup, setShowCustomWorkoutPopup] = useState(false);
   const [workout, setWorkout] = useState("");
@@ -279,4 +279,4 @@ function WorkoutPlans() {
   );
 }
 
-export default WorkoutPlans
+export default Workouts

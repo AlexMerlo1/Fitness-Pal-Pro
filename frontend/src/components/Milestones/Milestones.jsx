@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import './GoalsForm.css';
+import './Milestones.css';
 import { FaArrowRight } from 'react-icons/fa';
 
-const GoalsForm = () => {
+const Milestones = () => {
   // for top menu bar
   const [dropdownVisible, setDropdownVisible] = useState(false);
   const toggleDropdown = () => {
@@ -12,13 +12,13 @@ const GoalsForm = () => {
       window.open("http://localhost:3000/home");
   };
   const openWorkoutsPage = () => {
-      window.open("http://localhost:3000/workoutplans");
+      window.open("http://localhost:3000/workouts");
   };
   const openCompetitionsPage = () => {
       window.open("http://localhost:3000/Competitions");
   };
   const openMilestonesPage = () => {
-      window.open("http://localhost:3000/goals");
+      window.open("http://localhost:3000/Milestones");
   };
   const openFriendsPage = () => {
       window.open("http://localhost:3000/home");
@@ -126,4 +126,4 @@ const GoalsForm = () => {
   );
 };
 
-export default GoalsForm;
+export default Milestones;

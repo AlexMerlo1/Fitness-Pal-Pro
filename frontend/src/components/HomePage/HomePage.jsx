@@ -56,34 +56,7 @@ const HomePage = () => {
         )}
         </header>
         {/* end of top menu bar */}
-      
-      <div className='main-content-left'>
-        <div className='competitions-large-container'>
-          <div className='common-container'>
-          <h1>Need A Challenge?</h1>
-            <ChallengeTab />
-            <ChallengeTab />
-            <ChallengeTab />
-          </div>
-        </div>
-        <div className='workout-large-container'>
-          <h1>Plan Your Next Workout</h1>
-          <div className='common-container'>
-            <WorkoutTab />
-            <WorkoutTab />
-            <WorkoutTab />
-          </div>
-        </div>
-        <div className='character-environment'>
-          Test
-        </div>
-        <div className='milestones-contain'>
-          <MilestoneTabs />
-          <MilestoneTabs />
-          <MilestoneTabs />
-        </div>
-        <div className='avatar-container'></div>
-      </div>
+        
     </div>
   );
 }

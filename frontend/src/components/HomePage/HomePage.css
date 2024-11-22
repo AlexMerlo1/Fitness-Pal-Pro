@@ -1,8 +1,16 @@
+:root {
+  --darkgray: #1F262E;
+  --lightgray: #2A313B;
+  --lightblue: #007DFB;
+  --darkblue: #004080;
+  --yellow: #F2A900;
+}
+
 /* Container for the entire page */
 .homepage-container {
   width: 100%;
   height: 100%;
-  background-color: #1F262E; 
+  background-color: var(--darkgray); 
   color: #FFFFFF;
 }
 
