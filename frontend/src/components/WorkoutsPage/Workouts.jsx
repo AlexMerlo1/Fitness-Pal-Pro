@@ -17,6 +17,31 @@ function Workouts() {
   const [currentSet, setCurrentSet] = useState(1);
   const [totalSets, setTotalSets] = useState(0);
 
+  // for top menu bar
+  const [dropdownVisible, setDropdownVisible] = useState(false);
+  const toggleDropdown = () => {
+      setDropdownVisible(!dropdownVisible);
+    };
+  const openHomePage = () => {
+      window.open("http://localhost:3000/Home");
+  };
+  const openWorkoutsPage = () => {
+      window.open("http://localhost:3000/Workouts");
+  };
+  const openCompetitionsPage = () => {
+      window.open("http://localhost:3000/Competitions");
+  };
+  const openMilestonesPage = () => {
+      window.open("http://localhost:3000/Milestones");
+  };
+  const openFriendsPage = () => {
+      window.open("http://localhost:3000/Friends");
+  };
+  const openProfilePage = () => {
+    window.open("http://localhost:3000/Profile");
+  };
+  // end of top menu bar
+
   const workoutPlansData = {
     1: [
       { exercise: 'Bench Press', sets: 3, reps: 10, weight: 135 },
@@ -29,28 +54,6 @@ function Workouts() {
       { exercise: 'Bicep Curls', sets: 3, reps: 10, weight: 25 },
     ],
   };
-
-  // for top menu bar
-  const [dropdownVisible, setDropdownVisible] = useState(false);
-  const toggleDropdown = () => {
-      setDropdownVisible(!dropdownVisible);
-    };
-  const openHomePage = () => {
-      window.open("http://localhost:3000/home");
-  };
-  const openWorkoutsPage = () => {
-      window.open("http://localhost:3000/workoutplans");
-  };
-  const openCompetitionsPage = () => {
-      window.open("http://localhost:3000/Competitions");
-  };
-  const openMilestonesPage = () => {
-      window.open("http://localhost:3000/goals");
-  };
-  const openFriendsPage = () => {
-      window.open("http://localhost:3000/home");
-  };
-  // end of top menu bar
 
   const openPopup = (plan) => {
     setSelectedPlan(plan);
@@ -123,7 +126,7 @@ function Workouts() {
   };
 
   return (
-    <div className="App">
+    <div className="WorkoutPage">
       
       {/* for top menu bar */}
       <header className="the-header">
@@ -136,7 +139,7 @@ function Workouts() {
             <div className="menu-button" onClick={openCompetitionsPage}>Competitions</div>
             <div className="menu-button" onClick={openMilestonesPage}>Milestones</div>
             <div className="menu-button" onClick={openFriendsPage}>Friends</div>
-            <div className="the-profile-button" onClick={toggleDropdown}></div>
+            <div className="the-profile-button" onClick={openProfilePage}></div>
         </div>
         {dropdownVisible && (
         <div className="the-dropdown-menu">
@@ -151,6 +154,8 @@ function Workouts() {
       {/* end of top menu bar */}
 
       <h1>This is The Workouts Page</h1>
+
+      <div className="customWorkout" onClick={() => handleCustomWorkoutClick()}>customWorkout</div>
 
       <div className="workout-container">
         <div className="workout-plans">

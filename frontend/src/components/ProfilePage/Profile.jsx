@@ -9,10 +9,10 @@ const Profile = () => {
       setDropdownVisible(!dropdownVisible);
     };
   const openHomePage = () => {
-      window.open("http://localhost:3000/home");
+      window.open("http://localhost:3000/Home");
   };
   const openWorkoutsPage = () => {
-      window.open("http://localhost:3000/workouts");
+      window.open("http://localhost:3000/Workouts");
   };
   const openCompetitionsPage = () => {
       window.open("http://localhost:3000/Competitions");
@@ -21,7 +21,10 @@ const Profile = () => {
       window.open("http://localhost:3000/Milestones");
   };
   const openFriendsPage = () => {
-      window.open("http://localhost:3000/home");
+      window.open("http://localhost:3000/Friends");
+  };
+  const openProfilePage = () => {
+    window.open("http://localhost:3000/Profile");
   };
   // end of top menu bar
 
@@ -39,7 +42,7 @@ const Profile = () => {
             <div className="menu-button" onClick={openCompetitionsPage}>Competitions</div>
             <div className="menu-button" onClick={openMilestonesPage}>Milestones</div>
             <div className="menu-button" onClick={openFriendsPage}>Friends</div>
-            <div className="the-profile-button" onClick={toggleDropdown}></div>
+            <div className="the-profile-button" onClick={openProfilePage}></div>
         </div>
         {dropdownVisible && (
         <div className="the-dropdown-menu">
