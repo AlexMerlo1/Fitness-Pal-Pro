@@ -70,6 +70,10 @@ body {
 
 }
 
+.Profile-Button-big {
+  cursor: auto;
+}
+
 .Profile-name-div {
   flex-grow: 1;
   display: grid;
@@ -79,7 +83,7 @@ body {
 .Profile-button-name {
   margin: auto;
   margin-bottom: 0;
-  /* text-align:end; */
+  cursor: pointer;
 }
 
 .view-friends {
