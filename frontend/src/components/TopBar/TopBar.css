@@ -23,6 +23,14 @@
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;
 }
+
+.hide {
+  display: none;
+}
+.show {
+  display: inline-block;
+}
+
 .logo-div {
   display: flex;
   margin-left: 0;
@@ -44,10 +52,19 @@
   cursor: pointer;
 }
 .logo-name {
-  margin: 10px 20px;
+  margin-left: 20px;
+  /* padding-bottom: 20px; */
+  /* margin-top: 0; */
+  /* margin-bottom: auto; */
+  line-height: 50px;
   font-size: 50px;
-  line-height: 42px;
   cursor: pointer;
+  /* align-items: center; */
+  /* vertical-align: middle; */
+  text-overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+  /* min-width: 368px; */
 }
 .menu-button {
   text-align: center;
@@ -63,6 +80,7 @@
 }
 .ActiveTitle {
   font-weight: Bold;
+  color: var(--lightblue);
 }
 .ActiveProfile {
   display:none;

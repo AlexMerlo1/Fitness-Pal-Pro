@@ -6,10 +6,68 @@
   --yellow: #F2A900;
 }
 
+body {
+  height: 100%;
+}
+
 /* Container for the entire page */
 .homepage-container {
   width: 100%;
-  height: 100%;
+  height: 100vh;
   background-color: var(--darkgray); 
   color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+}
+
+.homepage-main {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.Workouts-Button-big, 
+.Competitions-Button-big, 
+.Milestones-Button-big, 
+.Profile-Button-big {
+  margin: 30px;
+  border-radius: 20px;
+  background-color: var(--lightgray);
+  display: flex;
+  font-size: 50px;
+  cursor: pointer;
+}
+
+.Workouts-logo-button, .Comp-logo-button, .Milestones-logo-button, .Pofile-logo-button {
+  width: 200px;
+  height: 200px;
+  background-image: url("/Users/benbraniff/Documents/GitHub/Fitness-Pal-Pro/frontend/src/assets/Fitness Pal Pro logo 2.png");
+  background-position: center;
+  background-size: 200px 200px;
+  background-color: var(--yellow);
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left:20px;
+}
+
+.Workouts-logo-button {
+  background-image: url("/Users/benbraniff/Documents/GitHub/Fitness-Pal-Pro/frontend/src/assets/workouts logo 1.png");
+
+}
+.Milestones-logo-button {
+  background-image: url("/Users/benbraniff/Documents/GitHub/Fitness-Pal-Pro/frontend/src/assets/milestones logo.png");
+
+}
+
+.Pofile-logo-button {
+  background-color: #c4c4c4;
+  background-image: url("/Users/benbraniff/Documents/GitHub/Fitness-Pal-Pro/frontend/src/assets/profile-icon-png-898.png");
+}
+
+.button-name {
+  margin: auto;
+  /* margin-left: 0px; */
+
 }

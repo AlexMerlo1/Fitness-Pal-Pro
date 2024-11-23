@@ -1,39 +1,48 @@
 import React, { useState } from 'react';
 import './TopBar.css';
+import { useNavigate } from "react-router-dom";
 
 function TopBar({titleClass, workoutClass, compClass, milestonesClass, friendsClass, profileClass}) {
+  const navigate = useNavigate();
+  
 
-  // for top menu bar
-  const [dropdownVisible, setDropdownVisible] = useState(false);
-  const toggleDropdown = () => {
-      setDropdownVisible(!dropdownVisible);
-    };
+  // Option 1
+  // currently not working
+  // const [isWideScreen, setIsWideScreen] = useState(false);
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     setIsWideScreen(window.innerWidth > 600); // Adjust the width as needed
+  //   };
+  //   window.addEventListener('resize', handleResize);
+  //   handleResize();
+  //   return () => window.removeEventListener('resize', handleResize);
+  // }, []);
+
   const openHomePage = () => {
-      window.open("http://localhost:3000/Home");
+      navigate("/Home");
   };
   const openWorkoutsPage = () => {
-      window.open("http://localhost:3000/Workouts");
+    navigate("/Workouts");
   };
   const openCompetitionsPage = () => {
-      window.open("http://localhost:3000/Competitions");
+    navigate("/Competitions");
   };
   const openMilestonesPage = () => {
-      window.open("http://localhost:3000/Milestones");
+    navigate("/Milestones");
   };
   const openFriendsPage = () => {
-      window.open("http://localhost:3000/Friends");
+    navigate("/Friends");
   };
   const openProfilePage = () => {
-    window.open("http://localhost:3000/Profile");
+    navigate("/Profile");
   };
-  // end of top menu bar
-
   return (
     <div className='topbar-container'>
-      {/* for top menu bar */}
       <header className="the-header">
         <div className="logo-div" >
             <div className="logo-button" onClick={openHomePage}></div>
+            {/* Option 1 */}
+            {/* <div className={`logo-name ${titleClass}`} onClick={openHomePage}>{isWideScreen && 'Fitness Pal Pro'}</div> */}
             <div className={`logo-name ${titleClass}`} onClick={openHomePage}>Fitness Pal Pro</div>
         </div>
         <div className="menubar-div" >
@@ -43,17 +52,7 @@ function TopBar({titleClass, workoutClass, compClass, milestonesClass, friendsCl
             <div class={`menu-button ${friendsClass}`} onClick={openFriendsPage}>Friends</div>
             <div class={`the-profile-button ${profileClass}`} onClick={openProfilePage}></div>
         </div>
-        {dropdownVisible && (
-        <div className="the-dropdown-menu">
-            <ul>
-            <li>View Profile</li>
-            <li>Settings</li>
-            <li>Log Out</li>
-            </ul>
-        </div>
-        )}
         </header>
-        {/* end of top menu bar */}
     </div>
   );
 }
