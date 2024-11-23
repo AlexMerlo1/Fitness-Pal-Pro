@@ -11,6 +11,7 @@ import NotificationsPopup from './components/NotificationPopUp/NotificationsPopu
 const HomePage = () => {
   const navigate = useNavigate();
   const isWideScreen = useWindowWidth(1200);
+  
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [isNotificationsVisible, setNotificationsVisible] = useState(false);
   const [friends] = useState(['Alice', 'Bob', 'Charlie', 'Diana']); // Example friends list
@@ -62,8 +63,6 @@ const HomePage = () => {
     <div className='homepage-container'>
       <TopBar titleClass="ActiveTitle"/>
       {/* <h1>This is The Home Page</h1> */}
-      <button className='navigation' onClick={togglePopup}>Alexs Friends</button>
-      <button className='navigation' onClick={toggleNotifications}>Alexs Notifications</button>
       <div className="homepage-main">
         <div className="Workouts-Button-big" onClick={openWorkoutsPage}>
           <div className="Workouts-logo-button" onClick={openWorkoutsPage}></div>
@@ -78,7 +77,8 @@ const HomePage = () => {
           <div className="Pofile-logo-button" onClick={openProfilePage}></div>
           <div className="Profile-name-div">
             <div className="Profile-button-name" onClick={openProfilePage}>{isWideScreen && 'Profile'}</div>
-            <div className="view-friends" onClick={openFriendsPage}>View Friends</div>
+            <div className="view-friends" onClick={togglePopup}>View Friends</div>
+            <div className='view-friends' onClick={toggleNotifications}>Alexs Notifications</div>
           </div>
         </div>
       </div>
