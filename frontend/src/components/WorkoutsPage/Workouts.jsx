@@ -106,24 +106,40 @@ function Workouts() {
       
       <TopBar workoutClass="ActiveTab"/>
 
-      <h1>This is The Workouts Page</h1>
-
-      <div className="customWorkout" onClick={() => handleCustomWorkoutClick()}>customWorkout</div>
-
       <div className="workout-container">
-        <div className="workout-plans">
-          {[1, 2, 3, 4, 5, 6].map((number) => (
-            <div key={number} className="workout-plan">
-              <h3>Workout Plan {number}</h3>
-              <p>Workout description</p>
-              <button
-                className="viewButton"
-                onClick={() => openPopup(number)}
-              >
-                View workout details
-              </button>
-            </div>
-          ))}
+        <div className="workout-Search-div">
+          <div className="workout-Search-bar">Search|</div>
+          <div class="workout-cards">
+              <button class="workout-card">Max Bench</button>
+              <button class="workout-card">Max Steps</button>
+              <button class="workout-card">Max Steps</button>
+              <button class="workout-card">Group X Class</button>
+              <button class="workout-card">Group X Class</button>
+              <button class="workout-card">Group X Class</button>
+              <button class="workout-card">Group X Class</button>
+              <button class="workout-card">Group X Class</button>
+              <button class="workout-card">Group X Class</button>
+              <button class="workout-card">Group X Class</button>
+              <button class="workout-card">Group X Class</button>
+              <button class="workout-card">Group X Class</button>
+          </div>
+        </div>
+        <div className="middle-div">
+          <div className="customWorkout" onClick={() => handleCustomWorkoutClick()}>customWorkout</div>
+          <div className="workout-plans">
+            {[1, 2, 3, 4, 5, 6].map((number) => (
+              <div key={number} className="workout-plan">
+                <h3>Workout Plan {number}</h3>
+                <p>Workout description</p>
+                <button
+                  className="viewButton"
+                  onClick={() => openPopup(number)}
+                >
+                  View workout details
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
         <div className="workout-log">
           <h2>Workout Log</h2>

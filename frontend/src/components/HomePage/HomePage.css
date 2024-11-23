@@ -4,6 +4,8 @@
   --lightblue: #007DFB;
   --darkblue: #004080;
   --yellow: #F2A900;
+  --offwhite: #c4c4c4;
+  --offgray: #b4b4b4;
 }
 
 body {
@@ -64,7 +66,7 @@ body {
 }
 
 .Pofile-logo-button {
-  background-color: #c4c4c4;
+  background-color: var(--offwhite);
   background-image: url("/Users/benbraniff/Documents/GitHub/Fitness-Pal-Pro/frontend/src/assets/profile-icon-png-898.png");
   margin-left: 20px;
 
@@ -88,7 +90,7 @@ body {
 
 .view-friends {
   cursor: pointer;
-  background-color: #b4b4b4;
+  background-color: var(--offgray);
   border-radius: 20px;
   font-size: 30px;
   padding: 20px;
