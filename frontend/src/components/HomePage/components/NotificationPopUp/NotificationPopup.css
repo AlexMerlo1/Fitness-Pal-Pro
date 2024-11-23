@@ -1,0 +1,87 @@
+/* NotificationPopup.css */
+
+/* Style the background overlay */
+.notifications-popup-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* Style the popup box */
+.notifications-popup {
+  background-color: #fff;
+  width: 300px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* Close button */
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.close-button:hover {
+  color: #f00;
+}
+
+/* Title of the popup */
+.notifications-popup h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+/* Loading and no notifications text */
+.notifications-popup p {
+  font-size: 16px;
+  color: #555;
+}
+
+/* Style the notification list */
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+ul li {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+
+ul li:last-child {
+  border-bottom: none;
+}
+
+/* Styling for the notification types (e.g., friend request) */
+.notification-item {
+  font-size: 14px;
+  color: #333;
+}
+
+.notification-item.friend-request {
+  color: #007bff;
+}
+
+.notification-item.no-notifications {
+  color: #888;
+}
