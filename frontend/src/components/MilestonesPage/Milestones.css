@@ -1,14 +1,9 @@
-.container {
-  color: #fff;
-  border-radius: 10px;
-  padding: 30px 40px;
-  place-items: center;
-  position: fixed;
-  top: 45%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.goals-container {
   width: 100%;
-  margin-top: 4rem;
+  display: grid;
+  position: relative;
+  background-color: #1F262E;
+
 }
 
 .weekly-container, .monthly-container {
@@ -85,7 +80,7 @@ h1 {
   display: flex;
   justify-content: space-around;
   transition: none;
-  gap: 20px;
+  gap: 20px; 
   padding: 10px;
 }
 

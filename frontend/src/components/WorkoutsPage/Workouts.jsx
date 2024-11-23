@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import './WorkoutPlans.css';
+import './Workouts.css';
+import TopBar from '../TopBar/TopBar.jsx';
 
-function WorkoutPlans() {
+function Workouts() {
   const [selectedPlan, setSelectedPlan] = useState(null);
-  const [dropdownVisible, setDropdownVisible] = useState(false);
   const [showCustomWorkoutPopup, setShowCustomWorkoutPopup] = useState(false);
   const [workout, setWorkout] = useState("");
   const [sets, setSets] = useState("");
@@ -38,10 +38,6 @@ function WorkoutPlans() {
   const closePopup = () => {
     setSelectedPlan(null);
     setShowCustomWorkoutPopup(false);
-  };
-
-  const toggleDropdown = () => {
-    setDropdownVisible(!dropdownVisible);
   };
 
   const handleCustomWorkoutClick = () => {
@@ -106,37 +102,44 @@ function WorkoutPlans() {
   };
 
   return (
-    <div className="App">
-      <header className="header">
-        <h1>Workout Plans</h1>
-        <button className="customWorkout" onClick={handleCustomWorkoutClick}>
-          Custom Workout
-        </button>
-        <div className="profile-button" onClick={toggleDropdown}></div>
-        {dropdownVisible && (
-          <div className="dropdown-menu">
-            <ul>
-              <li>View Profile</li>
-              <li>Settings</li>
-              <li>Log Out</li>
-            </ul>
-          </div>
-        )}
-      </header>
+    <div className="WorkoutPage">
+      
+      <TopBar workoutClass="ActiveTab"/>
+
       <div className="workout-container">
-        <div className="workout-plans">
-          {[1, 2, 3, 4, 5, 6].map((number) => (
-            <div key={number} className="workout-plan">
-              <h3>Workout Plan {number}</h3>
-              <p>Workout description</p>
-              <button
-                className="viewButton"
-                onClick={() => openPopup(number)}
-              >
-                View workout details
-              </button>
-            </div>
-          ))}
+        <div className="workout-Search-div">
+          <div className="workout-Search-bar">Search|</div>
+          <div class="workout-cards">
+              <button class="workout-card">Max Bench</button>
+              <button class="workout-card">Max Steps</button>
+              <button class="workout-card">Max Steps</button>
+              <button class="workout-card">Group X Class</button>
+              <button class="workout-card">Group X Class</button>
+              <button class="workout-card">Group X Class</button>
+              <button class="workout-card">Group X Class</button>
+              <button class="workout-card">Group X Class</button>
+              <button class="workout-card">Group X Class</button>
+              <button class="workout-card">Group X Class</button>
+              <button class="workout-card">Group X Class</button>
+              <button class="workout-card">Group X Class</button>
+          </div>
+        </div>
+        <div className="middle-div">
+          <div className="customWorkout" onClick={() => handleCustomWorkoutClick()}>customWorkout</div>
+          <div className="workout-plans">
+            {[1, 2, 3, 4, 5, 6].map((number) => (
+              <div key={number} className="workout-plan">
+                <h3>Workout Plan {number}</h3>
+                <p>Workout description</p>
+                <button
+                  className="viewButton"
+                  onClick={() => openPopup(number)}
+                >
+                  View workout details
+                </button>
+              </div>
+            ))}
+          </div>
         </div>
         <div className="workout-log">
           <h2>Workout Log</h2>
@@ -252,4 +255,4 @@ function WorkoutPlans() {
   );
 }
 
-export default WorkoutPlans
+export default Workouts
