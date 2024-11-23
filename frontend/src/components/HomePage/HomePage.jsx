@@ -3,12 +3,35 @@ import './HomePage.css';
 import TopBar from '../TopBar/TopBar.jsx';
 import { useNavigate } from "react-router-dom";
 import useWindowWidth from "frontend/src/components/ScreenSize/ScreenSize.jsx";
+import { FaUserFriends, FaCalendar, FaStore, FaEllipsisH, FaBell } from 'react-icons/fa';
+import FriendsPopup from './components/FriendsPopUp/FriendsPopUp';
+import NotificationsPopup from './components/NotificationPopUp/NotificationsPopup';
 
 
 
 const HomePage = () => {
   const navigate = useNavigate();
   const isWideScreen = useWindowWidth(1200);
+  const [isPopupVisible, setPopupVisible] = useState(false);
+  const [isNotificationsVisible, setNotificationsVisible] = useState(false);
+  const [friends] = useState(['Alice', 'Bob', 'Charlie', 'Diana']); // Example friends list
+  const [notifications, setNotifications] = useState([]); // Start with empty notifications
+  
+  // Example of dynamically fetching notifications (useEffect simulating fetch)
+  useEffect(() => {
+    const fetchedNotifications = [
+      'Workout Reminder: 5 PM',
+      'Challenge: New Week Starts Tomorrow',
+      'Milestone Unlocked!'
+    ];
+    setNotifications(fetchedNotifications); // Simulate setting fetched notifications
+  }, []);
+  const togglePopup = () => {
+    setPopupVisible(!isPopupVisible);
+  };
+  const toggleNotifications = () => {
+    setNotificationsVisible(!isNotificationsVisible);
+  };
 
   const openWorkoutsPage = () => {
     navigate("/Workouts");
@@ -47,6 +70,10 @@ const HomePage = () => {
           </div>
         </div>
       </div>
+      {isPopupVisible && <FriendsPopup friends={friends} onClose={togglePopup} />}
+      {isNotificationsVisible && (
+        <NotificationsPopup notifications={notifications} onClose={toggleNotifications} />
+      )}
     </div>
   );
 }
