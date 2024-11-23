@@ -52,6 +52,8 @@ const HomePage = () => {
     <div className='homepage-container'>
       <TopBar titleClass="ActiveTitle"/>
       {/* <h1>This is The Home Page</h1> */}
+      <button className='navigation' onClick={togglePopup}>Alex’s Friends</button>
+      <button className='navigation' onClick={toggleNotifications}>Alex’s Notifications</button>
       <div className="homepage-main">
         <div className="Workouts-Button-big" onClick={openWorkoutsPage}>
           <div className="Workouts-logo-button" onClick={openWorkoutsPage}></div>
