@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import React, { useState, useEffect } from 'react';
-import FriendsPopup from './components/FriendsPopUp/FriendsPopUp';
-import NotificationsPopup from './components/NotificationPopUp/NotificationsPopup';
 import './HomePage.css';
 import TopBar from '../TopBar/TopBar.jsx';
 import { useNavigate } from "react-router-dom";
@@ -12,6 +9,12 @@ import NotificationsPopup from './components/NotificationPopUp/NotificationsPopu
 
 
 const HomePage = () => {
+  const navigate = useNavigate();
+  const isWideScreen = useWindowWidth(1200);
+  const [isPopupVisible, setPopupVisible] = useState(false);
+  const [isNotificationsVisible, setNotificationsVisible] = useState(false);
+  const [friends] = useState(['Alice', 'Bob', 'Charlie', 'Diana']); // Example friends list
+  const [notifications, setNotifications] = useState([]); // Start with empty notifications
 
   // Example of dynamically fetching notifications (useEffect simulating fetch)
   useEffect(() => {
@@ -44,10 +47,6 @@ const HomePage = () => {
   const openProfilePage = () => {
     navigate("/Profile");
   };
-  const [isPopupVisible, setPopupVisible] = useState(false);
-  const [isNotificationsVisible, setNotificationsVisible] = useState(false);
-  const [friends] = useState(['Alice', 'Bob', 'Charlie', 'Diana']); // Example friends list
-  const [notifications, setNotifications] = useState([]); // Start with empty notifications
 
   // Example of dynamically fetching notifications (useEffect simulating fetch)
   useEffect(() => {
