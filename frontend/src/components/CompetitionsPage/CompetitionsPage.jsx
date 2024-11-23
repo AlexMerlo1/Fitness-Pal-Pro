@@ -12,27 +12,25 @@ const CompetitionsPage2 = () => {
         <TopBar compClass="ActiveTab"/>
 
 
-        <h1>This is The Competitions Page</h1>
+        {/* <h1>This is The Competitions Page</h1> */}
 
         <div class="comp-info">
-            <div class="competition-cards">
-                <button class="competition-card">Max Bench</button>
-                <button class="competition-card">Max Steps</button>
-                <button class="competition-card">Max Steps</button>
-                <button class="competition-card">Group X Class</button>
-                <button class="competition-card">Group X Class</button>
-                <button class="competition-card">Group X Class</button>
-                <button class="competition-card">Group X Class</button>
-                <button class="competition-card">Group X Class</button>
-                <button class="competition-card">Group X Class</button>
-                <button class="competition-card">Group X Class</button>
-                <button class="competition-card">Group X Class</button>
-                <button class="competition-card">Group X Class</button>
-                <button class="competition-card">Group X Class</button>
-                <button class="competition-card">Group X Class</button>
-                <button class="competition-card">Group X Class</button>
-                <button class="competition-card">Group X Class</button>
-                <button class="competition-card">Group X Class</button>
+            <div className="Search-div">
+                <div className="Search-bar">Search|</div>
+                <div class="competition-cards">
+                    <button class="competition-card">Max Bench</button>
+                    <button class="competition-card">Max Steps</button>
+                    <button class="competition-card">Max Steps</button>
+                    <button class="competition-card">Group X Class</button>
+                    <button class="competition-card">Group X Class</button>
+                    <button class="competition-card">Group X Class</button>
+                    <button class="competition-card">Group X Class</button>
+                    <button class="competition-card">Group X Class</button>
+                    <button class="competition-card">Group X Class</button>
+                    <button class="competition-card">Group X Class</button>
+                    <button class="competition-card">Group X Class</button>
+                    <button class="competition-card">Group X Class</button>
+                </div>
             </div>
             <div class="competition-details">
                 <div class="competition-header">
@@ -124,24 +122,9 @@ const CompetitionsPage2 = () => {
                     </table>
                     <p>30 fit cash for all</p>
                 </div>
-                <div class="rewards">
-                    <h3>Rewards</h3>
-                    <table class="table">
-                        <tr>
-                            <th>1.</th>
-                            <td>$25 gift card</td>
-                        </tr>
-                        <tr>
-                            <th>2.</th>
-                            <td>$15 gift card</td>
-                        </tr>
-                        <tr>
-                            <th>3.</th>
-                            <td>$10 gift card</td>
-                        </tr>
-                    </table>
-                    <p>30 fit cash for all</p>
-                </div>
+            </div>
+            <div className="competitions-log">
+            <h2>Competitions Log</h2>
             </div>
         </div>
     </div>

@@ -4,6 +4,8 @@
   --lightblue: #007DFB;
   --darkblue: #004080;
   --yellow: #F2A900;
+  --offwhite: #c4c4c4;
+  --offgray: #b4b4b4;
 }
 
 body {
@@ -19,49 +21,66 @@ body {
 }
 
 .comp-info {
-  display: inline-flex;
+  /* display: inline-flex; */
   width: 100%;
   margin-left: auto;
   margin-right: auto;
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.Search-div {
+  background-color: var(--lightgray);
+  border-radius: 20px;
+  margin: 20px;
+  max-height:800px;
+  padding-right:20px;
+}
+
+.Search-bar {
+  padding: 10px;
+  background-color: var(--offgray);
+  border-radius: 20px;
+  margin:10px;
+  font-size: 25px;;
 }
 
 .competition-cards {
   display: grid;
   gap: 10px;
-  margin-top: 10px;
-  width: 40%;
-  max-width: 400px;
-  max-height: 600px;
+  margin: 10px;
+  /* padding-right: 80px; */
+  width: 100%;
+  max-height: 700px;
   overflow-y: auto;
   scroll-margin-left: 20px;
-  margin-left: auto;
+  
 }
 
 .competition-details {
-  width: 40%;
+  
   color: #FFFFFF;
-  margin: 10px;
+  margin: auto;
   overflow-y: auto;
-  max-height: 600px;
+  max-height: 800px;
   padding-left:5px;
   padding-right:5px;
   max-width: 400px;
-  margin-right: auto;
 }
 
 .competition-card {
-  font-size: 16px;
+  font-size: 20px;
   text-align: left;
   padding: 20px;
   margin-right: 5px;
-  background-color: var(--lightgray);
+  background-color: #242a33;
   border-radius: 8px;
   color: #FFFFFF;
   border: none;
 }
 
 .competition-card:hover {
-  font-size: 16px;
   text-align: left;
   padding: 20px;
   background-color: #4D5B6B;
@@ -123,6 +142,16 @@ td {
 
 .leaderboard, .rewards {
   margin-top: 15px;
+}
+
+.competitions-log {
+  margin: 20px;
+  background: var(--lightgray);
+  border-radius: 20px;
+}
+
+.competitions-log h2{
+  margin: 20px;
 }
 
 /* width */
