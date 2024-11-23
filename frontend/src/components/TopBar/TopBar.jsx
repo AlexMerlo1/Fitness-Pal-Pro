@@ -1,22 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './TopBar.css';
 import { useNavigate } from "react-router-dom";
+import useWindowWidth from '../ScreenSize/ScreenSize';"frontend/src/components/ScreenSize/ScreenSize.jsx";
 
 function TopBar({titleClass, workoutClass, compClass, milestonesClass, friendsClass, profileClass}) {
   const navigate = useNavigate();
-  
-
-  // Option 1
-  // currently not working
-  // const [isWideScreen, setIsWideScreen] = useState(false);
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     setIsWideScreen(window.innerWidth > 600); // Adjust the width as needed
-  //   };
-  //   window.addEventListener('resize', handleResize);
-  //   handleResize();
-  //   return () => window.removeEventListener('resize', handleResize);
-  // }, []);
+  const isWideScreen = useWindowWidth(1200);
 
   const openHomePage = () => {
       navigate("/Home");
@@ -41,9 +30,7 @@ function TopBar({titleClass, workoutClass, compClass, milestonesClass, friendsCl
       <header className="the-header">
         <div className="logo-div" >
             <div className="logo-button" onClick={openHomePage}></div>
-            {/* Option 1 */}
-            {/* <div className={`logo-name ${titleClass}`} onClick={openHomePage}>{isWideScreen && 'Fitness Pal Pro'}</div> */}
-            <div className={`logo-name ${titleClass}`} onClick={openHomePage}>Fitness Pal Pro</div>
+            <div className={`logo-name ${titleClass}`} onClick={openHomePage}>{isWideScreen && 'Fitness Pal Pro'}</div>
         </div>
         <div className="menubar-div" >
             <div class={`menu-button ${workoutClass}`} onClick={openWorkoutsPage}>Workouts</div>

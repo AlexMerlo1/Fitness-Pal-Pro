@@ -81,6 +81,8 @@
 .ActiveTitle {
   font-weight: Bold;
   color: var(--lightblue);
+  text-decoration: underline;
+  text-decoration-thickness: 6px;
 }
 .ActiveProfile {
   display:none;

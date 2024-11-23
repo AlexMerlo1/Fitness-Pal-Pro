@@ -49,7 +49,8 @@ body {
   cursor: pointer;
   margin-top: auto;
   margin-bottom: auto;
-  margin-left:20px;
+  margin-left:auto;
+  margin-right:auto;
 }
 
 .Workouts-logo-button {
@@ -66,8 +67,30 @@ body {
   background-image: url("/Users/benbraniff/Documents/GitHub/Fitness-Pal-Pro/frontend/src/assets/profile-icon-png-898.png");
 }
 
+.Profile-name-div {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+}
+
+.Profile-button-name {
+  margin: auto;
+  margin-bottom: 0;
+  /* text-align:end; */
+}
+
+.view-friends {
+  cursor: pointer;
+  background-color: #007DFB;
+  border-radius: 20px;
+  font-size: 30px;
+  padding: 20px;
+  text-align: center;
+  margin: auto;
+  margin-top: 0;
+}
+
 .button-name {
   margin: auto;
-  /* margin-left: 0px; */
-
+  text-align: center;
 }
