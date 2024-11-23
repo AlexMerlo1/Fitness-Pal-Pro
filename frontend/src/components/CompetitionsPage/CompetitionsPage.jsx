@@ -1,12 +1,19 @@
-import React from 'react'
-import './CompetitionsPage.css'
+import React, { useState } from 'react';
+import './CompetitionsPage.css';
+import TopBar from '../TopBar/TopBar.jsx';
+
 
 const CompetitionsPage2 = () => {
+
+
   return (
     <div class="competitions-container">
-        <div class='top-bar'>
-            <h1>Competitions</h1>
-        </div>
+        
+        <TopBar compClass="ActiveTab"/>
+
+
+        <h1>This is The Competitions Page</h1>
+
         <div class="comp-info">
             <div class="competition-cards">
                 <button class="competition-card">Max Bench</button>

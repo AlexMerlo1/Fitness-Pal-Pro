@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import './WorkoutPlans.css';
+import './Workouts.css';
+import TopBar from '../TopBar/TopBar.jsx';
 
-function WorkoutPlans() {
+function Workouts() {
   const [selectedPlan, setSelectedPlan] = useState(null);
-  const [dropdownVisible, setDropdownVisible] = useState(false);
   const [showCustomWorkoutPopup, setShowCustomWorkoutPopup] = useState(false);
   const [workout, setWorkout] = useState("");
   const [sets, setSets] = useState("");
@@ -38,10 +38,6 @@ function WorkoutPlans() {
   const closePopup = () => {
     setSelectedPlan(null);
     setShowCustomWorkoutPopup(false);
-  };
-
-  const toggleDropdown = () => {
-    setDropdownVisible(!dropdownVisible);
   };
 
   const handleCustomWorkoutClick = () => {
@@ -106,23 +102,14 @@ function WorkoutPlans() {
   };
 
   return (
-    <div className="App">
-      <header className="header">
-        <h1>Workout Plans</h1>
-        <button className="customWorkout" onClick={handleCustomWorkoutClick}>
-          Custom Workout
-        </button>
-        <div className="profile-button" onClick={toggleDropdown}></div>
-        {dropdownVisible && (
-          <div className="dropdown-menu">
-            <ul>
-              <li>View Profile</li>
-              <li>Settings</li>
-              <li>Log Out</li>
-            </ul>
-          </div>
-        )}
-      </header>
+    <div className="WorkoutPage">
+      
+      <TopBar workoutClass="ActiveTab"/>
+
+      <h1>This is The Workouts Page</h1>
+
+      <div className="customWorkout" onClick={() => handleCustomWorkoutClick()}>customWorkout</div>
+
       <div className="workout-container">
         <div className="workout-plans">
           {[1, 2, 3, 4, 5, 6].map((number) => (
@@ -252,4 +239,4 @@ function WorkoutPlans() {
   );
 }
 
-export default WorkoutPlans
+export default Workouts

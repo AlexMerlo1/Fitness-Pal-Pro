@@ -1,24 +1,24 @@
-/* body {
-  background-color: black;
+:root {
+  --darkgray: #1F262E;
+  --lightgray: #2A313B;
+  --lightblue: #007DFB;
+  --darkblue: #004080;
+  --yellow: #F2A900;
 }
-*/
+
+body {
+  color: white;
+  background-color: var(--darkgray);
+}
+
 .competitions-container {
   width: 100%;
-  display: grid;
-  position: relative;
-}
+  height: 100vh;
+  background-color: var(--darkgray);
 
-.top-bar {
-  height: 100px;
-}
-
-.top-bar h1 {
-  color: white;
-  text-align: left;
 }
 
 .comp-info {
-  background-color: #1F262E;
   display: inline-flex;
   width: 100%;
   margin-left: auto;
@@ -54,7 +54,7 @@
   text-align: left;
   padding: 20px;
   margin-right: 5px;
-  background-color: #2A313B;
+  background-color: var(--lightgray);
   border-radius: 8px;
   color: #FFFFFF;
   border: none;
@@ -71,7 +71,7 @@
 }
 
 .leaderboard {
-  background-color: #2A313B;
+  background-color: var(--lightgray);
   border-radius: 8px;
   width: 100%;
   color: #FFFFFF;
@@ -95,7 +95,7 @@ td {
 }
 
 .rewards {
-  background-color: #2A313B;
+  background-color: var(--lightgray);
   border-radius: 8px;
   width: 100%;
   color: #FFFFFF;
@@ -110,7 +110,7 @@ td {
 
 .join-button {
   padding: 5px 15px;
-  background-color: #F2A900;
+  background-color: var(--yellow);
   color: #ffffff;
   border: none;
   border-radius: 5px;
@@ -118,7 +118,7 @@ td {
 }
 
 .join-button:hover {
-  background-color: #007DFB;
+  background-color: var(--lightblue);
 }
 
 .leaderboard, .rewards {
@@ -131,7 +131,7 @@ width: 12px;
 }
 /* Track */
 ::-webkit-scrollbar-track {
-background: #2A313B;
+background: var(--lightgray);
 border-radius: 10px;
 }
 /* Handle */
