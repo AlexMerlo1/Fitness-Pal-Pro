@@ -20,8 +20,6 @@
   padding: 20px;
   background-color: #2A313B;
   display: flex;
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
 }
 
 .hide {
