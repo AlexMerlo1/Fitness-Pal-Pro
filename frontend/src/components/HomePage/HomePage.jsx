@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import './HomePage.css';
 import axios from 'axios';
 import TopBar from '../TopBar/TopBar';
+import { useNavigate } from "react-router-dom";
 import FriendsPopup from './components/FriendsPopUp/FriendsPopUp';
 import NotificationsPopup from './components/NotificationPopUp/NotificationsPopup';
-import './HomePage.css';
+
 
 
 const HomePage = () => {
+  const navigate = useNavigate();
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [isNotificationsVisible, setNotificationsVisible] = useState(false);
   const [friends] = useState([]); // Dummy friends array for now
@@ -41,13 +44,26 @@ const HomePage = () => {
     setNotificationsVisible(!isNotificationsVisible);
   };
 
+  const openWorkoutsPage = () => {
+    navigate("/Workouts");
+  };
+  const openCompetitionsPage = () => {
+    navigate("/Competitions");
+  };
+  const openMilestonesPage = () => {
+    navigate("/Milestones");
+  };
+  const openProfilePage = () => {
+    navigate("/Profile");
+  };
+
 
   return (
     <div className="home-page-container">
       {/* TopBar component with props */}
       <TopBar
         friendsClass="navigation"
-        titleClass="logo"
+        titleClass="ActiveTitle"
         workoutClass="navigation"
         compClass="navigation"
         milestonesClass="navigation"
@@ -57,19 +73,39 @@ const HomePage = () => {
       />
 
 
-        <div className="homepage-main">
-          <div className="common-container">
-            <h1>Need A Challenge?</h1>
+      {/* <div className="homepage-main">
+        <div className="common-container">
+          <h1>Need A Challenge?</h1>
+        </div>
+        <div className="common-container">
+          <h1>Need A Challenge?</h1>
+        </div>
+        <div className="common-container">
+          <h1>Need A Challenge?</h1>
+        </div>
+        <div className="common-container">
+          <h1>Need A Challenge?</h1>
+        </div>
+      </div> */}
+      
+      <div className="homepage-main">
+        <div className="Workouts-Button-big" onClick={openWorkoutsPage}>
+          <div className="Workouts-logo-button" onClick={openWorkoutsPage}></div>
+          <div className="button-name">Workouts</div></div>
+        <div className="Competitions-Button-big" onClick={openCompetitionsPage}>
+          <div className="Comp-logo-button" onClick={openCompetitionsPage}></div>
+          <div className="button-name">Competitions</div></div>
+        <div className="Milestones-Button-big" onClick={openMilestonesPage}>
+          <div className="Milestones-logo-button" onClick={openMilestonesPage}></div>
+          <div className="button-name">Milestones</div></div>
+        <div className="Profile-Button-big">
+          <div className="Pofile-logo-button" onClick={openProfilePage}></div>
+          <div className="Profile-name-div">
+            <div className="Profile-button-name" onClick={openProfilePage}>Profile</div>
+            <div className="view-friends" onClick={toggleFriendsPopup}>View Friends</div>
+            <div className='view-friends' onClick={toggleNotificationsPopup}>Alexs Notifications</div>
           </div>
-          <div className="common-container">
-            <h1>Need A Challenge?</h1>
-          </div>
-          <div className="common-container">
-            <h1>Need A Challenge?</h1>
-          </div>
-          <div className="common-container">
-            <h1>Need A Challenge?</h1>
-          </div>
+        </div>
       </div>
 
 
