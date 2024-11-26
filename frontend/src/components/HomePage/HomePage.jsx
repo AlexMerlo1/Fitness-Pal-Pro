@@ -1,93 +1,91 @@
 import React, { useState, useEffect } from 'react';
-import './HomePage.css';
-import TopBar from '../TopBar/TopBar.jsx';
-import { useNavigate } from "react-router-dom";
-import useWindowWidth from "frontend/src/components/ScreenSize/ScreenSize.jsx";
+import axios from 'axios';
+import TopBar from '../TopBar/TopBar';
 import FriendsPopup from './components/FriendsPopUp/FriendsPopUp';
 import NotificationsPopup from './components/NotificationPopUp/NotificationsPopup';
-
+import './HomePage.css';
 
 
 const HomePage = () => {
-  const navigate = useNavigate();
-  const isWideScreen = useWindowWidth(1200);
-  
   const [isPopupVisible, setPopupVisible] = useState(false);
   const [isNotificationsVisible, setNotificationsVisible] = useState(false);
-  const [friends] = useState(['Alice', 'Bob', 'Charlie', 'Diana']); // Example friends list
-  const [notifications, setNotifications] = useState([]); // Start with empty notifications
+  const [friends] = useState([]); // Dummy friends array for now
+  const [notifications, setNotifications] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Example of dynamically fetching notifications (useEffect simulating fetch)
+
+  // Fetch notifications from the backend
   useEffect(() => {
-    const fetchedNotifications = [
-      'Workout Reminder: 5 PM',
-      'Challenge: New Week Starts Tomorrow',
-      'Milestone Unlocked!'
-    ];
-    setNotifications(fetchedNotifications); // Simulate setting fetched notifications
+    const fetchNotifications = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/notifications');
+        setNotifications(response.data || []); // Fallback to an empty array if response.data is undefined
+      } catch (error) {
+        console.error('Error fetching notifications:', error);
+      } finally {
+        setLoading(false); // Stop loading spinner once notifications are fetched
+      }
+    };
+
+
+    fetchNotifications();
   }, []);
-  const togglePopup = () => {
+
+
+  const toggleFriendsPopup = () => {
     setPopupVisible(!isPopupVisible);
   };
-  const toggleNotifications = () => {
+
+
+  const toggleNotificationsPopup = () => {
     setNotificationsVisible(!isNotificationsVisible);
   };
 
-  const openWorkoutsPage = () => {
-    navigate("/Workouts");
-  };
-  const openCompetitionsPage = () => {
-    navigate("/Competitions");
-  };
-  const openMilestonesPage = () => {
-    navigate("/Milestones");
-  };
-  const openFriendsPage = () => {
-    navigate("/Friends");
-  };
-  const openProfilePage = () => {
-    navigate("/Profile");
-  };
-
-  // Example of dynamically fetching notifications (useEffect simulating fetch)
-  useEffect(() => {
-    const fetchedNotifications = [
-      'Workout Reminder: 5 PM',
-      'Challenge: New Week Starts Tomorrow',
-      'Milestone Unlocked!'
-    ];
-    setNotifications(fetchedNotifications); // Simulate setting fetched notifications
-  }, []);
 
   return (
-    <div className='homepage-container'>
-      <TopBar titleClass="ActiveTitle"/>
-      {/* <h1>This is The Home Page</h1> */}
-      <div className="homepage-main">
-        <div className="Workouts-Button-big" onClick={openWorkoutsPage}>
-          <div className="Workouts-logo-button" onClick={openWorkoutsPage}></div>
-          <div className="button-name">{isWideScreen && 'Workouts'}</div></div>
-        <div className="Competitions-Button-big" onClick={openCompetitionsPage}>
-          <div className="Comp-logo-button" onClick={openCompetitionsPage}></div>
-          <div className="button-name">{isWideScreen && 'Competitions'}</div></div>
-        <div className="Milestones-Button-big" onClick={openMilestonesPage}>
-          <div className="Milestones-logo-button" onClick={openMilestonesPage}></div>
-          <div className="button-name">{isWideScreen && 'Milestones'}</div></div>
-        <div className="Profile-Button-big">
-          <div className="Pofile-logo-button" onClick={openProfilePage}></div>
-          <div className="Profile-name-div">
-            <div className="Profile-button-name" onClick={openProfilePage}>{isWideScreen && 'Profile'}</div>
-            <div className="view-friends" onClick={togglePopup}>View Friends</div>
-            <div className='view-friends' onClick={toggleNotifications}>Alexs Notifications</div>
+    <div className="home-page-container">
+      {/* TopBar component with props */}
+      <TopBar
+        friendsClass="navigation"
+        titleClass="logo"
+        workoutClass="navigation"
+        compClass="navigation"
+        milestonesClass="navigation"
+        onFriendsClick={toggleFriendsPopup}
+        onNotificationsClick={toggleNotificationsPopup}
+        notificationsCount={notifications.length}
+      />
+
+
+        <div className="homepage-main">
+          <div className="common-container">
+            <h1>Need A Challenge?</h1>
           </div>
-        </div>
+          <div className="common-container">
+            <h1>Need A Challenge?</h1>
+          </div>
+          <div className="common-container">
+            <h1>Need A Challenge?</h1>
+          </div>
+          <div className="common-container">
+            <h1>Need A Challenge?</h1>
+          </div>
       </div>
-      {isPopupVisible && <FriendsPopup friends={friends} onClose={togglePopup} />}
+
+
+      {/* Friends Popup */}
+      {isPopupVisible && <FriendsPopup friends={friends} onClose={toggleFriendsPopup} />}
+      {/* Notifications Popup */}
       {isNotificationsVisible && (
-        <NotificationsPopup notifications={notifications} onClose={toggleNotifications} />
+        <NotificationsPopup
+          notifications={notifications || []}
+          onClose={toggleNotificationsPopup}
+        />
       )}
+      {loading && <div>Loading notifications...</div>} {/* Loading state */}
     </div>
   );
 };
+
 
 export default HomePage;
