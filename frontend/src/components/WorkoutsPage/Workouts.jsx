@@ -107,23 +107,6 @@ function Workouts() {
       <TopBar workoutClass="ActiveTab"/>
 
       <div className="workout-container">
-        <div className="workout-Search-div">
-          <div className="workout-Search-bar">Search|</div>
-          <div class="workout-cards">
-              <button class="workout-card">Max Bench</button>
-              <button class="workout-card">Max Steps</button>
-              <button class="workout-card">Max Steps</button>
-              <button class="workout-card">Group X Class</button>
-              <button class="workout-card">Group X Class</button>
-              <button class="workout-card">Group X Class</button>
-              <button class="workout-card">Group X Class</button>
-              <button class="workout-card">Group X Class</button>
-              <button class="workout-card">Group X Class</button>
-              <button class="workout-card">Group X Class</button>
-              <button class="workout-card">Group X Class</button>
-              <button class="workout-card">Group X Class</button>
-          </div>
-        </div>
         <div className="middle-div">
           <div className="customWorkout" onClick={() => handleCustomWorkoutClick()}>customWorkout</div>
           <div className="workout-plans">

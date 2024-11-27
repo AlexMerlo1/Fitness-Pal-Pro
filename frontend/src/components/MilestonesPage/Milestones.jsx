@@ -28,10 +28,10 @@ const Milestones = () => {
             {/* <div className="milestones-search-bar">Search|</div> */}
             <input className="milestones-search-bar" type="text" placeholder="Search Milestones"/>
             <div class="milestones-cards">
+                <button class="milestones-card" onClick={() => toggleBarGraphPopup(data1, options1)}>Body Weight</button>
+                <button class="milestones-card" onClick={() => toggleBarGraphPopup(data2, options2)}>Daily Step Count</button>
+                <button class="milestones-card" onClick={() => toggleBarGraphPopup(data3, options3)}>Workout Duration</button>
                 <button class="milestones-card">1 Rep Max Bench Press</button>
-                <button class="milestones-card">Daily Step Count</button>
-                <button class="milestones-card">Workout Duration</button>
-                <button class="milestones-card">Body Weight</button>
                 <button class="milestones-card">Calories burned per workout</button>
                 <button class="milestones-card">Workout Streak</button>
             </div>
@@ -43,7 +43,7 @@ const Milestones = () => {
             </div>
           <div className="graph-div">
             <div className="graph-topbar">
-            graph1
+            Pinned Graph 1
             <SlSizeFullscreen className="zoom-button" onClick={() => toggleBarGraphPopup(data1, options1)}/>
             </div>
             <div className="graph-display">
@@ -52,7 +52,7 @@ const Milestones = () => {
             </div>
             <div className="graph-div">
             <div className="graph-topbar">
-            graph2
+            Pinned Graph 2
             <SlSizeFullscreen className="zoom-button" onClick={() => toggleBarGraphPopup(data2, options2)}/>
             </div>
             <div className="graph-display">
@@ -61,7 +61,7 @@ const Milestones = () => {
             </div>
             <div className="graph-div">
             <div className="graph-topbar">
-            graph3
+            Pinned Graph 3
             <SlSizeFullscreen className="zoom-button" onClick={() => toggleBarGraphPopup(data3, options3)}/>
             </div>
             <div className="graph-display">
