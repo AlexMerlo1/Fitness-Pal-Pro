@@ -3,109 +3,93 @@
   display: grid;
   position: relative;
   background-color: #1F262E;
-
+  height: 100vh;
+  overflow-y:hidden;
 }
 
-.weekly-container, .monthly-container {
-  text-align: center;
-  margin-bottom: 2em;
+.milestones-body {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 }
 
-.weekly-container {
-  text-align: center;
+.milestones-search-div {
+  background-color: var(--lightgray);
+  border-radius: 20px;
+  margin: 20px;
+  max-height:800px;
+  padding-right:20px;
 }
 
-.skill-button {
-  padding: 30px;
-  background: #246CBE;
-  backdrop-filter: blur(30px);
-  padding-top: 100px;
-  padding-bottom: 100px;
-  margin-right: 40px;
-  margin-left: 40px;
-  border-radius: 15px;
-  font-size: 3em;
-  color: white;
-  border: 2px solid white;
-  transition: background-color .2s ease-in-out, transform .3s ease-in-out;
-}
-
-.skill-button:hover {
-  background-color: #FD760F;
-  transform: scale(1.05);
-}
-
-h1 {
-  text-align: center;
-  font-size: 4.5em;
-  margin-bottom: 50px;
-}
-
-.submit-button {
-  text-align: right;
-  margin-right: 85px;
-}
-
-.button-submit {
-  background: transparent;
-  backdrop-filter: blur(30px);
-  border: 2px solid white;
-  outline: none;
-  border-radius: 40px;
-  cursor: pointer;
-  font-size: 16px;
-  height: 50%;
-  color: white;
-  font-weight: 700;
-  padding: 20px;
-  text-align: center;
-  transition: background-color .2s ease-in-out, border-color .2s ease-in-out;
-}
-
-.button-submit:hover {
-  background: white;
-  border: 2px solid black;
-  color: black;
-}
-
-.scroller {
-  max-width: 100%;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-}
-
-
-.scroller-inner {
-  display: flex;
-  justify-content: space-around;
-  transition: none;
-  gap: 20px; 
+.milestones-search-bar {
   padding: 10px;
+  background-color: var(--offgray);
+  border-radius: 20px;
+  margin:10px;
+  font-size: 25px;;
 }
 
-.start-marquee {
-  animation: marquee-animation .2s ease-in-out, fade-in .25s ease-in-out;
+.milestones-cards {
+  display: grid;
+  gap: 10px;
+  margin: 10px;
+  /* padding-right: 80px; */
+  width: 100%;
+  max-height: 700px;
+  overflow-y: auto;
+  scroll-margin-left: 20px;
+  
 }
 
-@keyframes marquee-animation {
-  0% {
-    transform: translateX(0); /* Start at initial position */
-  }
-  100% {
-    transform: translateX(-100%); /* Move all content to the left */
-  }
+.milestones-card {
+  font-size: 20px;
+  text-align: left;
+  padding: 20px;
+  margin-right: 5px;
+  background-color: #242a33;
+  border-radius: 8px;
+  color: #FFFFFF;
+  border: none;
 }
 
-@keyframes fade-in {
-  0% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
+.milestones-card:hover {
+  text-align: left;
+  padding: 20px;
+  background-color: #4D5B6B;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+}
 
-  100% {
-    opacity: 0;
-  }
+.graphs-body {
+  flex-grow: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  height: 100%;
+}
+
+.goals-div {
+  border-radius: 20px;
+  margin: 20px;
+  margin-bottom: 0px;
+  background-color: var(--lightgray);
+}
+
+.graph-div {
+  border-radius: 20px;
+  margin: 20px;
+  margin-bottom:0px;
+  padding: 20px;
+  padding-bottom: 0px;
+  background-color: var(--lightgray);
+}
+
+.graph-topbar {
+  display: flex;
+}
+
+.zoom-button {
+  margin:10px;
+  margin-left: auto;
+  cursor: pointer;
 }
