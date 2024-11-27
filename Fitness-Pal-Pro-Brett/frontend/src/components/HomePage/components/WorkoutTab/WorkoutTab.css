@@ -1,0 +1,56 @@
+.workout-tab {
+    background: linear-gradient(#FFA500, #FF4500); /* Orange gradient for energy */
+    padding: 3%;
+    border-radius: 20px;
+    filter: drop-shadow(0 0 0.5rem black);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 350px;
+    margin: auto;
+    text-align: center;
+    color: white;
+  }
+  
+  .workout-name {
+    font-size: 1.6rem;
+    font-weight: bold;
+    margin: 10px 0;
+    text-transform: uppercase;
+  }
+  
+  .workout-duration {
+    font-size: 1.2rem;
+    margin: 5px 0;
+    color: #FFFFE0; /* Light yellow for readability */
+  }
+  
+  .workout-calories {
+    font-size: 1rem;
+    margin: 5px 0;
+    color: #FFD700; /* Gold for calories burned */
+  }
+  
+  .start-button {
+    background-color: #FF4500; /* Deep orange for buttons */
+    color: white;
+    font-size: 1rem;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  
+  .start-button:hover {
+    background-color: #FF6347; /* Slightly lighter orange on hover */
+    transform: scale(1.05);
+  }
+  
+  .start-button:active {
+    background-color: #FF4500; /* Original color when pressed */
+    transform: scale(1);
+  }
+  

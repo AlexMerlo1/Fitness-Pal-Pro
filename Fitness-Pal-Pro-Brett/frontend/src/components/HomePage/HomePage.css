@@ -1,0 +1,117 @@
+
+/* Container for the entire page */
+.home-page-container {
+  width: 100vw;
+  height: 100vh;
+  background-color: #1F262E; 
+  color: #FFFFFF;
+}
+/* Top bar container */
+.top-bar {
+  display: flex;
+  height: 5%;
+  padding: 10px 20px;
+  background-color: #1F262E;
+  border-radius: 8px;
+  justify-content: flex-end;
+}
+/* Container for navigation buttons */
+.buttons {
+  display: flex;
+  gap: 5%;
+}
+/* Navigation button styles */
+.navigation {
+  background-color: #2A313B;
+  color: #FFFFFF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  font-size: 2rem;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 250px;
+}
+.navigation:hover {
+  background-color: #3A3F4A;
+}
+/* Current balance display */
+.current-balance {
+  background-color: #F2A900;
+  color: #000000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  margin: 0 2%;
+  font-size: 2rem;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 250px;
+  font-weight: bold;
+}
+/* Settings icon area */
+.settings {
+  background-color: #2A313B;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  margin-right: 2%;
+  font-size: 2rem;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 250px;
+  font-weight: bold;
+}
+/* Left Side Content */
+.main-content-left {
+  display: flex;
+  flex-direction: column;
+  margin-left: 2%;
+  width: 50%;
+}
+.competitions-large-container h1,
+.workout-large-container h1 {
+  color: #FFFFFF;
+  font-size: 3rem;
+  text-align: left;
+  margin: 0;
+}
+.common-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5%;
+  background: #2A313B;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  padding: 2rem;
+  padding-top: 1rem;
+  border-radius: 20px;
+}
+.character-environment {
+  background-color: #1F262E;
+  padding: 20px;
+  border-radius: 8px;
+  margin-top: 20px;
+  color: #FFFFFF;
+  text-align: center;
+}
+.milestones-contain {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+h2 {
+  color: black;
+}
+h3 {
+  color: black;
+}
+
+
