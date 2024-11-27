@@ -5,14 +5,19 @@ import { SlSizeFullscreen } from "react-icons/sl";
 // import SimpleGraph from './Components/Graph.jsx';
 import BarGraph from './Components/Graph.jsx';
 import BarGraphOverlay from './Components/GraphOverlay.jsx';
+import {data1, options1, data2, options2, data3, options3, data4, options4, data5, options5, data6, options6} from './Components/GraphData.jsx'
 
 const Milestones = () => {
   
   const [isBarGraphPopupVisible, setBarGraphPopupVisible] = useState(false);
+  const [currentGraph, setCurrentGraph] = useState({ data: null, options: null });
 
-  const toggleBarGraphPopup = () => {
+
+  const toggleBarGraphPopup = (graphData = null, graphOptions = null) => {
+    setCurrentGraph({ data: graphData, options: graphOptions });
     setBarGraphPopupVisible(!isBarGraphPopupVisible);
   };
+  
 
 
   return (
@@ -20,20 +25,15 @@ const Milestones = () => {
       <TopBar milestonesClass="ActiveTab"/>
       <div className='milestones-body'>
         <div className="milestones-search-div">
-            <div className="milestones-search-bar">Search|</div>
+            {/* <div className="milestones-search-bar">Search|</div> */}
+            <input className="milestones-search-bar" type="text" placeholder="Search Milestones"/>
             <div class="milestones-cards">
-                <button class="milestones-card">Max Bench</button>
-                <button class="milestones-card">Max Steps</button>
-                <button class="milestones-card">Max Steps</button>
-                <button class="milestones-card">Group X Class</button>
-                <button class="milestones-card">Group X Class</button>
-                <button class="milestones-card">Group X Class</button>
-                <button class="milestones-card">Group X Class</button>
-                <button class="milestones-card">Group X Class</button>
-                <button class="milestones-card">Group X Class</button>
-                <button class="milestones-card">Group X Class</button>
-                <button class="milestones-card">Group X Class</button>
-                <button class="milestones-card">Group X Class</button>
+                <button class="milestones-card">1 Rep Max Bench Press</button>
+                <button class="milestones-card">Daily Step Count</button>
+                <button class="milestones-card">Workout Duration</button>
+                <button class="milestones-card">Body Weight</button>
+                <button class="milestones-card">Calories burned per workout</button>
+                <button class="milestones-card">Workout Streak</button>
             </div>
         </div>
         <div className="graphs-body">
@@ -44,36 +44,33 @@ const Milestones = () => {
           <div className="graph-div">
             <div className="graph-topbar">
             graph1
-            <SlSizeFullscreen className="zoom-button" onClick={toggleBarGraphPopup}/>
+            <SlSizeFullscreen className="zoom-button" onClick={() => toggleBarGraphPopup(data1, options1)}/>
             </div>
             <div className="graph-display">
-              <BarGraph />
+              <BarGraph data={data1} options={options1}/>
             </div>
             </div>
             <div className="graph-div">
             <div className="graph-topbar">
-            graph1
-            <SlSizeFullscreen className="zoom-button" onClick={toggleBarGraphPopup}/>
+            graph2
+            <SlSizeFullscreen className="zoom-button" onClick={() => toggleBarGraphPopup(data2, options2)}/>
             </div>
             <div className="graph-display">
-              <BarGraph />
+              <BarGraph data={data2} options={options2}/>
             </div>
             </div>
             <div className="graph-div">
             <div className="graph-topbar">
-            graph1
-            <SlSizeFullscreen className="zoom-button" onClick={toggleBarGraphPopup}/>
+            graph3
+            <SlSizeFullscreen className="zoom-button" onClick={() => toggleBarGraphPopup(data3, options3)}/>
             </div>
             <div className="graph-display">
-              <BarGraph />
+              <BarGraph data={data3} options={options3}/>
             </div>
             </div>
         </div>
       </div>
-
-
-      {isBarGraphPopupVisible && <BarGraphOverlay onClose={toggleBarGraphPopup} />}
-      {/* {isBarGraphPopupVisible && <FriendsPopup onClose={toggleBarGraphPopup} />} */}
+      {isBarGraphPopupVisible && <BarGraphOverlay onClose={toggleBarGraphPopup} data={currentGraph.data} options={currentGraph.options}/>}
     </div>
   );
 };

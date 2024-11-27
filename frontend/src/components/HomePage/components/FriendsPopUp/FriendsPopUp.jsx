@@ -8,6 +8,22 @@ const FriendsPopup = ({ onClose }) => {
   const [friends, setFriends] = useState([]); 
   const [loading, setLoading] = useState(false); 
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Escape') {
+      onClose();
+    }
+  };
+
+  useEffect(() => {
+    // Attach keydown event listener
+    document.addEventListener('keydown', handleKeyDown);
+
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, []);
+
   // Fetch friends when the search term changes
   useEffect(() => {
     if (searchTerm.trim() === '') {
