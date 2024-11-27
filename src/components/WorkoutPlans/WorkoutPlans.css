@@ -1,0 +1,198 @@
+/* Existing Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  
+  .App {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #1e1e2f;
+    color: #fff;
+    height: 100vh;
+  }
+  
+  .header {
+    width: 100%;
+    height: 150px;
+    padding: 20px;
+    background-color: #2b2b3b;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+  }
+  
+  .header h1 {
+    padding: 10px 20px;
+    margin: 0;
+  }
+  
+  .customWorkout {
+    background-color: #ffb300;
+    color: #000;
+    width: 250px;
+    height: 80px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    position: relative;
+    left: -250px;
+    font-size: 18px;
+  }
+  
+  .profile-button {
+    width: 100px;
+    height: 100px;
+    background-color: #ffb300;
+    border-radius: 50%;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+  
+  .dropdown-menu {
+    position: absolute;
+    top: 140px;
+    right: 20px;
+    background-color: #333344;
+    border-radius: 10px;
+    padding: 10px;
+    color: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+  }
+  
+  .dropdown-menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .dropdown-menu li {
+    padding: 10px 20px;
+    cursor: pointer;
+  }
+  
+  .dropdown-menu li:hover {
+    background-color: #444455;
+  }
+  
+  .workout-container {
+    display: flex;
+    width: 80%;
+    margin-top: 20px;
+  }
+  
+  .workout-plans {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    flex: 2;
+  }
+  
+  .workout-plan {
+    background-color: #333344;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  .viewButton,
+  .progressButton {
+    background-color: #ffb300;
+    color: #000;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .workout-log {
+    flex: 1;
+    background-color: #333344;
+    margin-left: 20px;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .popup-content {
+    background-color: #333344;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    width: 300px;
+    color: #fff;
+  }
+  
+  .popup-content label {
+    display: block;
+    margin-bottom: 10px;
+    color: #fff;
+  }
+  
+  .popup-content input {
+    width: 100%;
+    padding: 5px;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    border: none;
+  }
+  
+  .closeButton,
+  .enterButton {
+    margin-top: 10px;
+    background-color: #ffb300;
+    color: #000;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  
+  .enterButton {
+    margin-left: 10px;
+  }
+  
+  .progress-container {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #2b2b3b;
+    padding: 20px;
+    color: white;
+    text-align: center;
+  }
+  
+  .progress-bar {
+    width: 80%;
+    height: 20px;
+    background-color: #555;
+    border-radius: 10px;
+    margin: 10px auto;
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background-color: #ffb300;
+    border-radius: 10px;
+    transition: width 0.5s;
+  }

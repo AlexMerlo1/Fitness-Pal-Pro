@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './NotificationPopup.css';
-import Notification from './Notification'; // Import the Notification component
+import Notification from './Notification'; 
 
 const NotificationsPopup = ({ onClose }) => {
   const [notifications, setNotifications] = useState([]);
-  const [loading, setLoading] = useState(true);  // Add loading state
-  const [error, setError] = useState(null);  // Add error state
+  const [loading, setLoading] = useState(true);  
+  const [error, setError] = useState(null);  
   const popupRef = useRef(null);
 
   useEffect(() => {
@@ -29,11 +29,10 @@ const NotificationsPopup = ({ onClose }) => {
         }
 
         const data = await response.json();
-        console.log('Notifications response data:', data); // Log the entire response for debugging
+        console.log('Notifications response data:', data);
 
-        // Extract notifications from the correct field (pending_requests)
         if (data.pending_requests && Array.isArray(data.pending_requests)) {
-          setNotifications(data.pending_requests); // Set notifications to the correct field
+          setNotifications(data.pending_requests); 
         } else {
           setNotifications([]);  // Set empty array if the field is missing or not an array
         }
@@ -58,7 +57,43 @@ const NotificationsPopup = ({ onClose }) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [onClose]); // Don't include `loading` and `notifications` in the dependency array
+  }, [onClose]);
+
+  const refreshNotifications = async () => {
+    setLoading(true);  // Set loading to true while refreshing
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setError('No token found. Please log in.');
+        setLoading(false);
+        return;
+      }
+
+      const response = await fetch('http://localhost:5000/notifications', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch notifications');
+      }
+
+      const data = await response.json();
+      console.log('Notifications response data after refresh:', data); // Log the refreshed data
+
+      if (data.pending_requests && Array.isArray(data.pending_requests)) {
+        setNotifications(data.pending_requests);
+      } else {
+        setNotifications([]);
+      }
+    } catch (error) {
+      console.error('Error fetching notifications after refresh:', error);
+      setError('Could not load notifications. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="notifications-popup-container">
@@ -66,19 +101,21 @@ const NotificationsPopup = ({ onClose }) => {
         <button className="close-button" onClick={onClose}>✖</button>
         <h3>Notifications</h3>
 
-        {/* Show loading message while fetching */}
         {loading && !error ? (
           <p>Loading...</p>
         ) : error ? (
-          <p className="error-message">{error}</p> // Display error message
+          <p className="error-message">{error}</p>
         ) : notifications.length > 0 ? (
           <ul>
             {notifications.map((notification, index) => (
               <li key={index}>
-                {/* Pass notification type and data to the Notification component */}
                 <Notification 
-                  type={notification.type} // Assuming 'status' is the type
+                  type={notification.type}
                   data={notification} 
+                  onActionComplete={(updatedData) => {
+                    console.log('Friend request action completed for:', updatedData);
+                    refreshNotifications();
+                  }}
                 />
               </li>
             ))}
