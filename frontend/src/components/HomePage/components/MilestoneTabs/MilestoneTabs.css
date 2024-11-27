@@ -1,0 +1,57 @@
+.milestone-tab {
+    background: linear-gradient(#28a745, #155724); /* Green gradient for milestones */
+    padding: 3%;
+    border-radius: 20px;
+    filter: drop-shadow(0 0 0.5rem black);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 400px;
+    margin: auto;
+    text-align: center;
+    color: white;
+  }
+  
+  .milestone-name {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin: 10px 0;
+  }
+  
+  .milestone-progress {
+    font-size: 1.2rem;
+    margin: 5px 0;
+    color: #FFD700; /* Gold for progress */
+  }
+  
+  .milestone-goal {
+    font-size: 1rem;
+    margin: 10px 0;
+    color: #F8F9FA; /* Light text for contrast */
+  }
+  
+  .progress-bar {
+    width: 90%;
+    height: 20px;
+    margin-top: 10px;
+    border-radius: 10px;
+    background: #f8f9fa; /* Light gray background */
+    appearance: none;
+  }
+  
+  .progress-bar::-webkit-progress-bar {
+    background-color: #f8f9fa; /* Light gray background for webkit browsers */
+    border-radius: 10px;
+  }
+  
+  .progress-bar::-webkit-progress-value {
+    background: #FFD700; /* Gold for progress fill */
+    border-radius: 10px;
+  }
+  
+  .progress-bar::-moz-progress-bar {
+    background: #FFD700; /* Gold for progress fill in Firefox */
+    border-radius: 10px;
+  }
+  
