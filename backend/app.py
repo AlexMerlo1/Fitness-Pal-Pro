@@ -35,6 +35,35 @@ class user_friends(db.Model):
         db.UniqueConstraint('user_id', 'friend_id', name='unique_friendship'),
     )
 
+class user_workouts(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    created_by = db.Column(db.String, unique=True, nullable=False)
+    workout_name = db.Column(db.String, unique=True, nullable=False) 
+    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+
+class user_exercies(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    workout_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    set_number = db.Column(db.Integer, primary_key=True)
+    weight = db.Column(db.Integer, primary_key=True)
+    reps = db.Column(db.Integer, primary_key=True)
+    
+def get_jwt_token(request):
+    # Extract the JWT token from the Authorization header
+    token = request.headers.get('Authorization')
+    if not token:
+        return jsonify({"message": "Token is missing!"}), 401
+    
+    # Decode the token to get the user_id
+    try:
+        token = token.split(" ")[1]  # Get the token from 'Bearer <token>'
+        decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
+        user_id = decoded_token['user_id']
+        return user_id
+    except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
+        return jsonify({"message": "Invalid or expired token!"}), 401
+    
+
 @app.before_request
 def create_tables():
     db.create_all()
@@ -94,19 +123,7 @@ import jwt
 @app.route('/add_friend', methods=['POST'])
 def add_friend():
     try:
-        # Extract the JWT token from the Authorization header
-        token = request.headers.get('Authorization')
-        if not token:
-            return jsonify({"message": "Token is missing!"}), 401
-        
-        # Decode the token to get the user_id
-        try:
-            token = token.split(" ")[1]  # Get the token from 'Bearer <token>'
-            decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
-            user_id = decoded_token['user_id']
-        except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
-            return jsonify({"message": "Invalid or expired token!"}), 401
-        
+        user_id = get_jwt_token(request)
         # Retrieve the user details based on user_id
         user = User.query.get(user_id)
         if not user:
@@ -153,19 +170,8 @@ def add_friend():
 @app.route('/notifications', methods=['GET'])
 def get_pending_friend_requests():
     try:
-        # Extract the JWT token from the Authorization header
-        token = request.headers.get('Authorization')
-        if not token:
-            return jsonify({"message": "Token is missing!"}), 401
-        
-        # Decode the token to get the user_id
-        try:
-            token = token.split(" ")[1]  # Get the token from 'Bearer <token>'
-            decoded_token = jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])
-            user_id = decoded_token['user_id']
-        except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
-            return jsonify({"message": "Invalid or expired token!"}), 401
-        
+        # User ID of logged in user
+        user_id = get_jwt_token(request)
         # Retrieve the user details based on user_id
         user = User.query.get(user_id)
         if user is not None:
@@ -272,8 +278,33 @@ def login():
         print(f"Error during login: {e}")
         print(traceback.format_exc()) 
         return jsonify({"message": "Internal server error", "error": str(e)}), 500
+
+@app.route("/create_custom_workout", methods=["POST"])
+def create_custom_workout():
+    try:
+        user_id = get_jwt_token(request)
+        data = request.json()
+        if not data:
+            return jsonify({"message": "No data provided!"}), 400
+        workout_name = data.get('workout_name')
+        set_number = data.get('set_number')
+        reps = data.get('reps')
+        weight = data.get('weight')
+        new_workout = user_workouts(created_by=user_id, workout_name=workout_name,date_created=datetime.utcnow())
+        
+        workout_id = 1 # REPLACE
+        
+        new_exercise = user_exercies(workout_id=workout_id, set_number=set_number,weight=weight,reps=reps)
+        db.session.add(new_workout, new_exercise)
+        db.session.commit()
+    except Exception as e:
+        print(f"Error adding workout: {e}")
+        print(traceback.format_exc()) 
+        return jsonify({"message": "Internal server error", "error": str(e)}), 500
+ 
 from app import db, user_friends
 print(db.inspect(user_friends).columns.keys())  
+
 
 print(db.inspect(User).columns.keys())  
 if __name__ == '__main__':
