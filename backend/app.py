@@ -228,6 +228,37 @@ def login():
         print(f"Error during login: {e}")
         print(traceback.format_exc()) 
         return jsonify({"message": "Internal server error", "error": str(e)}), 500
+@app.route('/profile/<friend_id>', methods=['GET'])
+def get_profile(friend_id):
+    try:
+        # Query the User table to find the user with the given username
+        print(f"Fetching profile for {friend_id}")
+        user = User.query.filter_by(username=friend_id).first()
+        # Check if the user exists
+        if not user:
+            return jsonify({"message": "Profile not found"}), 404
+        
+        # Count the number of friends where the status is "accepted"
+        friend_count = user_friends.query.filter(
+            ((user_friends.user_id == user.username) | (user_friends.friend_id == user.username)) &
+            (user_friends.status == 'accepted')
+        ).count()
+        
+        # Build the profile response
+        profile_data = {
+            "id": user.id,
+            "username": user.username,
+            "email": user.email,
+            "bio": f"{user.username} joined on {user.date_created.strftime('%Y-%m-%d')}",
+            "date_created": user.date_created.strftime('%Y-%m-%d %H:%M:%S'),
+            "friends_count": friend_count 
+        }
+        
+        return jsonify(profile_data), 200
+    except Exception as e:
+        print(f"Error fetching profile: {e}")
+        return jsonify({"message": "Internal server error"}), 500
+
 from app import db, user_friends
 print(db.inspect(user_friends).columns.keys())  
 

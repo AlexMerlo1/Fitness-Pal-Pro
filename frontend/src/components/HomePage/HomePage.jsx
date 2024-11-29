@@ -3,6 +3,7 @@ import axios from 'axios';
 import TopBar from '../TopBar/TopBar';
 import FriendsPopup from './components/FriendsPopUp/FriendsPopUp';
 import NotificationsPopup from './components/NotificationPopUp/NotificationsPopup';
+import FriendProfilePage from './components/FriendCard/FriendProfilePage';
 import './HomePage.css';
 
 
