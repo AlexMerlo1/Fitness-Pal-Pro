@@ -4,7 +4,7 @@ import FriendsPopup from '../HomePage/components/FriendsPopUp/FriendsPopUp';
 import NotificationsPopup from '../HomePage/components/NotificationPopUp/NotificationsPopup';
 import './TopBar.css';
 import useWindowWidth from '../ScreenSize/ScreenSize';
-import { FaUserFriends, FaCalendar, FaStore, FaEllipsisH, FaBell } from 'react-icons/fa';
+import { FaBell } from 'react-icons/fa';
 
 
 function TopBar({ titleClass, workoutClass, compClass, milestonesClass, friendsClass, profileClass }) {
