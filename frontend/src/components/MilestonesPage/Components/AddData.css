@@ -1,0 +1,64 @@
+.add-Data-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.addData-container {
+  background: var(--lightgray);
+  padding: 20px;
+  border-radius: 10px;
+  width: 20%;
+  height: 40%;
+  text-align: center;
+}
+
+.close-Button {
+  width: 30px; 
+  height: 30px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%; 
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2em; 
+  font-weight: bold;
+  text-align: center;
+}
+
+.close-button:hover {
+  background-color: #0056b3;
+}
+
+.addData-container {
+  background-color: var(--lightgray);
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 300px;
+  color: #fff;
+}
+
+.addData-container label {
+  display: block;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.addData-container input {
+  width: 100%;
+  padding: 5px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  border: none;
+}

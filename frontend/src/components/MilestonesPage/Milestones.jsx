@@ -4,6 +4,7 @@ import TopBar from '../TopBar/TopBar.jsx';
 import { SlSizeFullscreen } from "react-icons/sl";
 // import SimpleGraph from './Components/Graph.jsx';
 import BarGraph from './Components/Graph.jsx';
+import AddData from './Components/AddData.jsx';
 import BarGraphOverlay from './Components/GraphOverlay.jsx';
 import {data1, options1, data2, options2, data3, options3, data4, options4, data5, options5, data6, options6} from './Components/GraphData.jsx'
 
@@ -11,13 +12,20 @@ const Milestones = () => {
   
   const [isBarGraphPopupVisible, setBarGraphPopupVisible] = useState(false);
   const [currentGraph, setCurrentGraph] = useState({ data: null, options: null });
+  const [isAddDataPopupVisible, setAddDataPopupVisible] = useState(false);
 
+
+  
+  const toggleAddDataPopup = () => {
+    setBarGraphPopupVisible(false);
+    setAddDataPopupVisible(!isAddDataPopupVisible);
+  };
 
   const toggleBarGraphPopup = (graphData = null, graphOptions = null) => {
     setCurrentGraph({ data: graphData, options: graphOptions });
+    setAddDataPopupVisible(false);
     setBarGraphPopupVisible(!isBarGraphPopupVisible);
   };
-  
 
 
   return (
@@ -48,7 +56,7 @@ const Milestones = () => {
             </div>
             <div className="graph-display">
               <BarGraph data={data1} options={options1}/>
-              <div className="data-button" onClick={() => handleCustomWorkoutClick()}>Add Data</div>
+              <div className="data-button" onClick={() => toggleAddDataPopup()}>Add Data1</div>
             </div>
             </div>
             {/* <div className="graph-div">
@@ -67,12 +75,13 @@ const Milestones = () => {
             </div>
             <div className="graph-display">
               <BarGraph data={data3} options={options3}/>
-              <div className="data-button" onClick={() => handleCustomWorkoutClick()}>Add Data</div>
+              <div className="data-button" onClick={() => toggleAddDataPopup()}>Add Data2</div>
             </div>
             </div>
         </div>
       </div>
       {isBarGraphPopupVisible && <BarGraphOverlay onClose={toggleBarGraphPopup} data={currentGraph.data} options={currentGraph.options}/>}
+      {isAddDataPopupVisible && <AddData onClose={toggleAddDataPopup} data={currentGraph.data}/>}
     </div>
   );
 };
