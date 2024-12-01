@@ -123,7 +123,6 @@ function Workouts() {
             ))}
           </div>
         </div>
-        <div className="right-side">
         <div className="workout-log">
           <h2>Workout Log</h2>
           {workoutLog.length === 0 ? (
@@ -140,9 +139,9 @@ function Workouts() {
               ))}
             </ul>
           )}
+          <div className="customWorkout" onClick={() => handleCustomWorkoutClick()}>customWorkout</div>
         </div>
-        <div className="customWorkout" onClick={() => handleCustomWorkoutClick()}>customWorkout</div>
-        </div>
+        
       </div>
 
       {selectedPlan && (
