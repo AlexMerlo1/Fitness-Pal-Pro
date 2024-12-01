@@ -29,18 +29,18 @@ const Milestones = () => {
             <input className="milestones-search-bar" type="text" placeholder="Search Milestones"/>
             <div class="milestones-cards">
                 <button class="milestones-card" onClick={() => toggleBarGraphPopup(data1, options1)}>Body Weight</button>
-                <button class="milestones-card" onClick={() => toggleBarGraphPopup(data2, options2)}>Daily Step Count</button>
+                {/* <button class="milestones-card" onClick={() => toggleBarGraphPopup(data2, options2)}>Daily Step Count</button> */}
                 <button class="milestones-card" onClick={() => toggleBarGraphPopup(data3, options3)}>Workout Duration</button>
-                <button class="milestones-card">1 Rep Max Bench Press</button>
+                {/* <button class="milestones-card">1 Rep Max Bench Press</button>
                 <button class="milestones-card">Calories burned per workout</button>
-                <button class="milestones-card">Workout Streak</button>
+                <button class="milestones-card">Workout Streak</button> */}
             </div>
         </div>
         <div className="graphs-body">
-          <div className="goals-div">
+          {/* <div className="goals-div">
             goals
             <div className="zoom-button"></div>
-            </div>
+          </div> */}
           <div className="graph-div">
             <div className="graph-topbar">
             Pinned Graph 1
@@ -48,9 +48,10 @@ const Milestones = () => {
             </div>
             <div className="graph-display">
               <BarGraph data={data1} options={options1}/>
+              <div className="data-button" onClick={() => handleCustomWorkoutClick()}>Add Data</div>
             </div>
             </div>
-            <div className="graph-div">
+            {/* <div className="graph-div">
             <div className="graph-topbar">
             Pinned Graph 2
             <SlSizeFullscreen className="zoom-button" onClick={() => toggleBarGraphPopup(data2, options2)}/>
@@ -58,7 +59,7 @@ const Milestones = () => {
             <div className="graph-display">
               <BarGraph data={data2} options={options2}/>
             </div>
-            </div>
+            </div> */}
             <div className="graph-div">
             <div className="graph-topbar">
             Pinned Graph 3
@@ -66,6 +67,7 @@ const Milestones = () => {
             </div>
             <div className="graph-display">
               <BarGraph data={data3} options={options3}/>
+              <div className="data-button" onClick={() => handleCustomWorkoutClick()}>Add Data</div>
             </div>
             </div>
         </div>

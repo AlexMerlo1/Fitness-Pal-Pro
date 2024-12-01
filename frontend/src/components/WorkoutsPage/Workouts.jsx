@@ -108,7 +108,6 @@ function Workouts() {
 
       <div className="workout-container">
         <div className="middle-div">
-          <div className="customWorkout" onClick={() => handleCustomWorkoutClick()}>customWorkout</div>
           <div className="workout-plans">
             {[1, 2, 3, 4, 5, 6].map((number) => (
               <div key={number} className="workout-plan">
@@ -124,6 +123,7 @@ function Workouts() {
             ))}
           </div>
         </div>
+        <div className="right-side">
         <div className="workout-log">
           <h2>Workout Log</h2>
           {workoutLog.length === 0 ? (
@@ -140,6 +140,8 @@ function Workouts() {
               ))}
             </ul>
           )}
+        </div>
+        <div className="customWorkout" onClick={() => handleCustomWorkoutClick()}>customWorkout</div>
         </div>
       </div>
 
