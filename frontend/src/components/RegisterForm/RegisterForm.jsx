@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import './RegisterForm.css';
+import { useNavigate } from 'react-router-dom';
 const RegisterForm = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -8,6 +9,7 @@ const RegisterForm = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const navigate = useNavigate();
   const isValidEmail = (email) => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailPattern.test(email);
@@ -49,6 +51,7 @@ const RegisterForm = () => {
         setEmail('');
         setPassword('');
         setConfirmPassword('');
+        setTimeout(() => navigate('/login'), 200);
       } else {
         setError(data.message || 'An error occurred');
         setSuccess('');
