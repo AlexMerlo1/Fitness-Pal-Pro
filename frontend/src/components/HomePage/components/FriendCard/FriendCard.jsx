@@ -1,5 +1,6 @@
 import React from 'react';
-  // Add friend function
+import { useNavigate } from 'react-router-dom';
+
   const add_friend = async (friendId) => {
     try {
       const token = localStorage.getItem('token');  // Get the token from localStorage (or wherever you store it)
@@ -10,7 +11,7 @@ import React from 'react';
           'Authorization': `Bearer ${token}`,  // Send the token in the Authorization header
         },
         body: JSON.stringify({
-          friend_id: friendId,  // ID of the friend to add
+          friend_id: friendId,  
         }),
       });
   
@@ -27,10 +28,15 @@ import React from 'react';
   };
 
 const FriendCard = ({ friend }) => {
+  const navigate = useNavigate();
+  const view_profile = (friendId) => {
+    navigate(`/profile/${friendId}`); 
+  };
   return (
     <div className="friend-card">
       <h3>{friend}</h3>
       <button onClick={() => add_friend(friend)}>Add Friend</button>
+      <button onClick={() => view_profile(friend)}>View Profile</button>
     </div>
   );
 };
