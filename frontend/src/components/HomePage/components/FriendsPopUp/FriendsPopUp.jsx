@@ -53,7 +53,7 @@ const FriendsPopup = ({ onClose }) => {
     <div className='popup-overlay' onClick={handleOverlayClick}>
       <div className='popup-container'>
         <div className='header'>
-          <h2>Your Friends <br />{friends.length} Friends</h2>
+          <h2> <br />{friends.length} Friends</h2>
           <input 
             type="text" 
             placeholder="Search..." 

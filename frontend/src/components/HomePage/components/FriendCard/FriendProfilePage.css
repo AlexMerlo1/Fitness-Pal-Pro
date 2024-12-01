@@ -1,0 +1,92 @@
+:root {
+  --darkgray: #1F262E;
+  --lightgray: #2A313B;
+  --lightblue: #007DFB;
+  --darkblue: #004080;
+  --yellow: #F2A900;
+  --orange: #ffb300;
+  }
+.full-page h1 {
+  color: var(--yellow);
+}
+.full-page {
+  justify-content: center;
+  align-items: center; 
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+}
+.profile-container {
+  max-width: 800px;
+  text-align: left;
+  padding: 20px;
+  flex-direction: column;
+  background-color: var(--lightgray);
+  border-radius: 8px;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  justify-content: center;
+  align-items: center; 
+  border: 2px solid var(--lightblue);
+}
+
+.profile-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.profile-username {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.profile-bio {
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  margin-top: 10px;
+}
+
+.profile-friends-count {
+  font-size: 1rem;
+  color: #16a085;
+  margin-top: 5px;
+}
+
+.workouts-section {
+  margin-top: 40px;
+}
+
+.workouts-list {
+  list-style-type: none;
+  padding: 0;
+  text-align: center;
+}
+
+.workout-item {
+  background-color: #ecf0f1;
+  margin: 10px 0;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.workout-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #2980b9;
+}
+h2 {
+  color: var(--yellow);
+  text-align: center;
+}
+.workout-date {
+  font-size: 1rem;
+  color: #95a5a6;
+}
+
+.loading-message {
+  font-size: 1.5rem;
+  text-align: center;
+  color: #e74c3c;
+}

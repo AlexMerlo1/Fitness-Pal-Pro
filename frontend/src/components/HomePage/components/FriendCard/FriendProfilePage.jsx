@@ -1,10 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
+import './FriendProfilePage.css';
+import { FaArrowLeft } from 'react-icons/fa';
+
+// BackButton Component
+const BackButton = () => {
+  const navigate = useNavigate();
+
+  const goBack = () => {
+    navigate('/workouts'); // Navigates to the /workouts route
+  };
+
+  return (
+    <button className="back-button" onClick={goBack}>
+      <FaArrowLeft />
+    </button>
+  );
+};
 
 const FriendProfilePage = () => {
   const { friendId } = useParams();
   const [profile, setProfile] = useState(null);
-  const [workouts, setWorkouts] = useState([]);
 
   // Fetch profile data
   useEffect(() => {
@@ -25,54 +41,35 @@ const FriendProfilePage = () => {
     fetchProfile();
   }, [friendId]);
 
-  // Fetch recent workouts
-  useEffect(() => {
-    const fetchWorkouts = async () => {
-      try {
-        const response = await fetch(`http://localhost:5000/workouts/${friendId}`);
-        const data = await response.json();
-        if (response.ok) {
-          setWorkouts(data);
-        } else {
-          console.error('Error fetching workouts:', data.message);
-        }
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-
-    fetchWorkouts();
-  }, [friendId]);
-
-  if (!profile) return <p>Loading profile...</p>;
+  if (!profile) return <p className="loading-message">Loading profile...</p>;
 
   return (
-    <div>
-      <h1>{profile.username}'s Profile</h1>
-      <p>{profile.bio}</p>
+    <div className="full-page">
+      <div className="profile-container">
+        {/* Use the BackButton component */}
+        <BackButton />
+        <div className="profile-header">
+          <h1 className="profile-username">{profile.username}</h1>
+          <p className="profile-bio">{profile.bio}</p>
+          <p className="profile-friends-count">{profile.friends_count} Friends</p>
+        </div>
 
-      <h2>Recent Workouts</h2>
-      {workouts.length > 0 ? (
-        <ul>
-          {workouts.map((workout) => (
-            <li key={workout.id}>
-              <h3>{workout.name}</h3>
-              <p>Date: {new Date(workout.date).toLocaleDateString()}</p>
-              <p>Duration: {workout.duration} minutes</p>
-              <p>Exercises:</p>
-              <ul>
-                {workout.exercises.map((exercise, index) => (
-                  <li key={index}>
-                    {exercise.name}: {exercise.reps} reps, {exercise.sets} sets
-                  </li>
-                ))}
-              </ul>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No recent workouts available.</p>
-      )}
+        <div className="workouts-section">
+          <h2>Recent Workouts</h2>
+          {profile.latest_workouts.length > 0 ? (
+            <ul className="workouts-list">
+              {profile.latest_workouts.map((workout, index) => (
+                <li key={index} className="workout-item">
+                  <h3 className="workout-name">{workout.workout_name}</h3>
+                  <p className="workout-date">Date: {new Date(workout.date_created).toLocaleDateString()}</p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No recent workouts available.</p>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

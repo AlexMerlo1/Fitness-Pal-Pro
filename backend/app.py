@@ -7,6 +7,7 @@ import traceback
 from flask_cors import CORS
 import jwt
 from flask_migrate import Migrate
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///FitPro.db'
 app.config['SECRET_KEY'] = str('VerySecretKey!')
@@ -37,17 +38,13 @@ class user_friends(db.Model):
 
 class user_workouts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    created_by = db.Column(db.String, unique=True, nullable=False)
-    workout_name = db.Column(db.String, unique=True, nullable=False) 
+    created_by = db.Column(db.String, nullable=False)
+    workout_name = db.Column(db.String, nullable=False) 
+    sets = db.Column(db.Integer, nullable=False)
+    weight = db.Column(db.Integer, nullable=False)
+    reps = db.Column(db.Integer, nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
 
-class user_exercies(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    workout_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    set_number = db.Column(db.Integer, primary_key=True)
-    weight = db.Column(db.Integer, primary_key=True)
-    reps = db.Column(db.Integer, primary_key=True)
-    
 def get_jwt_token(request):
     # Extract the JWT token from the Authorization header
     token = request.headers.get('Authorization')
@@ -278,63 +275,103 @@ def login():
         print(f"Error during login: {e}")
         print(traceback.format_exc()) 
         return jsonify({"message": "Internal server error", "error": str(e)}), 500
+def get_ordinal_suffix(day):
+    if 10 <= day <= 20:  
+        suffix = 'th'
+    else:
+        suffix = {1: 'st', 2: 'nd', 3: 'rd'}.get(day % 10, 'th')
+    return f"{day}{suffix}"
+
 @app.route('/profile/<friend_id>', methods=['GET'])
 def get_profile(friend_id):
     try:
         # Query the User table to find the user with the given username
         print(f"Fetching profile for {friend_id}")
         user = User.query.filter_by(username=friend_id).first()
+        
         # Check if the user exists
         if not user:
             return jsonify({"message": "Profile not found"}), 404
         
-        # Count the number of friends where the status is "accepted"
+        # Count the number of accepted friends
         friend_count = user_friends.query.filter(
-            ((user_friends.user_id == user.username) | (user_friends.friend_id == user.username)) &
+            ((user_friends.user_id == user.username) | (user_friends.friend_id == user.username)) & 
             (user_friends.status == 'accepted')
         ).count()
+        
+        # Query the latest workouts (limit to last 5 workouts ordered by date)
+        print(user.id)
+        latest_workouts = user_workouts.query.filter_by(created_by=user.id) \
+            .order_by(user_workouts.date_created.desc()) \
+            .limit(5).all()
+        # Format workouts for JSON response
+        workouts_data = [
+            {
+                "workout_name": workout.workout_name,
+                "date_created": workout.date_created.strftime('%Y-%m-%d %H:%M:%S'),
+            }
+            for workout in latest_workouts
+        ]
         
         # Build the profile response
         profile_data = {
             "id": user.id,
             "username": user.username,
             "email": user.email,
-            "bio": f"{user.username} joined on {user.date_created.strftime('%Y-%m-%d')}",
-            "date_created": user.date_created.strftime('%Y-%m-%d %H:%M:%S'),
-            "friends_count": friend_count 
+            "bio": f"Created account on {user.date_created.strftime('%B ')}{get_ordinal_suffix(user.date_created.day)}, {user.date_created.strftime('%Y')}",
+            "friends_count": friend_count,
+            "latest_workouts": workouts_data
         }
-        
+
         return jsonify(profile_data), 200
     except Exception as e:
         print(f"Error fetching profile: {e}")
         return jsonify({"message": "Internal server error"}), 500
 
-
 @app.route("/create_custom_workout", methods=["POST"])
 def create_custom_workout():
     try:
-        user_id = get_jwt_token(request)
-        data = request.json()
+        created_by = get_jwt_token(request)
+        
+        # Ensure created_by is a valid user ID
+        if not created_by:
+            return jsonify({"message": "User not authenticated!"}), 401
+        
+        # Get the workout data from the request
+        data = request.get_json()
+        print(f"Received data: {data}")
+        
         if not data:
             return jsonify({"message": "No data provided!"}), 400
+        
         workout_name = data.get('workout_name')
-        set_number = data.get('set_number')
+        sets = data.get('sets')
         reps = data.get('reps')
         weight = data.get('weight')
-        new_workout = user_workouts(created_by=user_id, workout_name=workout_name,date_created=datetime.utcnow())
         
-        workout_id = 1 # REPLACE
+        # Create the new workout object
+        new_workout = user_workouts(
+            created_by=created_by,  # This should be the user ID
+            workout_name=workout_name,
+            sets=sets,
+            reps=reps,
+            weight=weight,
+            date_created=datetime.utcnow()
+        )
         
-        new_exercise = user_exercies(workout_id=workout_id, set_number=set_number,weight=weight,reps=reps)
-        db.session.add(new_workout, new_exercise)
+        # Add the new workout to the database and commit
+        db.session.add(new_workout)
         db.session.commit()
+        
+        return jsonify({"message": "Workout added successfully!"}), 201
+    
     except Exception as e:
         print(f"Error adding workout: {e}")
-        print(traceback.format_exc()) 
         return jsonify({"message": "Internal server error", "error": str(e)}), 500
- 
+
 from app import db, user_friends
 print(db.inspect(user_friends).columns.keys())  
+print(db.inspect(user_workouts).columns.keys())  
 
 
 print(db.inspect(User).columns.keys())  
