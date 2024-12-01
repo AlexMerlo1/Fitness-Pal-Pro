@@ -268,48 +268,43 @@ function WorkoutPlans() {
       {showCustomWorkoutPopup && (
         <div className="popup-overlay" onClick={closePopup}>
           <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-            <h2>Enter Custom Workout Details</h2>
-            <label>
-              Workout:
-              <input
-                type="text"
-                value={workout}
-                onChange={(e) => setWorkout(e.target.value)}
-              />
-            </label>
-            <label>
-              Sets:
-              <input
-                type="number"
-                value={sets}
-                onChange={(e) => setSets(e.target.value)}
-              />
-            </label>
-            <label>
-              Reps:
-              <input
-                type="number"
-                value={reps}
-                onChange={(e) => setReps(e.target.value)}
-              />
-            </label>
-            <label>
-              Weight:
-              <input
-                type="number"
-                value={weight}
-                onChange={(e) => setWeight(e.target.value)}
-              />
-            </label>
-            <button className="closeButton" onClick={closePopup}>
-              Close
-            </button>
-            <button className="enterButton" onClick={handleSubmit}>
-              Enter
-            </button>
+            <h2>Add a Custom Workout</h2>
+            <input
+              type="text"
+              placeholder="Workout Name"
+              value={workout}
+              onChange={(e) => setWorkout(e.target.value)}
+            />
+            <input
+              type="number"
+              placeholder="Sets"
+              value={sets}
+              onChange={(e) => setSets(e.target.value)}
+            />
+            <input
+              type="number"
+              placeholder="Reps"
+              value={reps}
+              onChange={(e) => setReps(e.target.value)}
+            />
+            <input
+              type="number"
+              placeholder="Weight (lbs)"
+              value={weight}
+              onChange={(e) => setWeight(e.target.value)}
+            />
+            <div className="popup-buttons">
+              <button className="closeButton" onClick={closePopup}>
+                Cancel
+              </button>
+              <button className="enterButton" onClick={handleSubmit}>
+                Save Workout
+              </button>
+            </div>
           </div>
         </div>
       )}
+
 
       {showProgressBar && (
         <div className="progress-container">

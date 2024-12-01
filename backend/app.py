@@ -92,6 +92,7 @@ class UserGoal(db.Model):
     completed = db.Column(db.Boolean, default=False) # True if goal is completed
     # Relationships
     user = db.relationship('User', backref='user_goals', lazy=True)
+    progress = db.Column(db.Integer, default=0)
 
 
 class UserCompetition(db.Model):
@@ -123,6 +124,22 @@ class WorkoutLog(db.Model):
     date_logged = db.Column(db.DateTime, default=datetime.utcnow)
 
     user = db.relationship('User', backref='workout_logs', lazy=True)
+
+class Competition(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False, unique=True)
+    description = db.Column(db.String, nullable=True)
+    visibility = db.Column(db.String, default='public')  # 'public' or 'private'
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    owner = db.relationship('User', backref='owned_competitions', lazy=True)
+
+class GoalProgress(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_goal_id = db.Column(db.Integer, db.ForeignKey('user_goal.id'), nullable=False)
+    progress = db.Column(db.Integer, nullable=False)
+    date = db.Column(db.DateTime, default=datetime.utcnow)
+
 
 
 @app.before_request
@@ -222,6 +239,14 @@ def get_workouts():
         return jsonify({"message": "Failed to fetch workouts", "error": str(e)}), 500
 
 
+@app.route('/leaderboard', methods=['GET'])
+def get_leaderboard():
+    goals = db.session.query(UserGoal.user_id, db.func.sum(UserGoal.progress).label('total_progress')).group_by(UserGoal.user_id).order_by(db.desc('total_progress')).all()
+    leaderboard = [{"user_id": goal[0], "total_progress": goal[1]} for goal in goals]
+    return jsonify(leaderboard), 200
+
+
+
 @app.route('/save_workout_log', methods=['POST'])
 def save_workout_log():
     try:
@@ -277,6 +302,46 @@ def save_workout_log():
         db.session.rollback()
         print(f"Error saving workout log: {e}")
         return jsonify({"message": "Failed to save workout log", "error": str(e)}), 500
+
+
+@app.route('/update_goal_progress', methods=['POST'])
+def update_goal_progress():
+    try:
+        data = request.get_json()
+        user_id = data.get('user_id')
+        goal_name = data.get('goal_name')
+        progress = data.get('progress')
+
+        if not user_id or not goal_name or progress is None:
+            return jsonify({"message": "User ID, goal name, and progress are required!"}), 400
+
+        goal = UserGoal.query.filter_by(user_id=user_id, goal_name=goal_name).first()
+        if not goal:
+            return jsonify({"message": "Goal not found!"}), 404
+
+        goal.progress = progress
+        goal.completed = progress >= 100
+        db.session.commit()
+
+        return jsonify({"message": "Goal progress updated successfully!"}), 200
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error updating goal progress: {e}")
+        return jsonify({"message": "Failed to update goal progress", "error": str(e)}), 500
+
+@app.route('/get_goal_progress', methods=['GET'])
+def get_goal_progress():
+    user_id = request.args.get('user_id')
+    if not user_id:
+        return jsonify({"message": "User ID is required!"}), 400
+
+    goals = UserGoal.query.filter_by(user_id=user_id).all()
+    return jsonify([
+        {"name": goal.goal_name, "type": goal.goal_type, "progress": goal.progress, "completed": goal.completed}
+        for goal in goals
+    ]), 200
+
+
 
 @app.route('/get_workout_logs', methods=['GET'])
 def get_workout_logs():
@@ -592,24 +657,6 @@ def get_user_goals():
         for goal in goals
     ]), 200
 
-@app.route('/mark_goal_completed', methods=['POST'])
-def mark_goal_completed():
-    data = request.get_json()
-    user_id = data.get('user_id')
-    goal_name = data.get('goal_name')
-    goal_type = data.get('goal_type')
-    completed = data.get('completed')  # True or False
-
-    if not user_id or not goal_name or not goal_type or completed is None:
-        return jsonify({"message": "User ID, goal name, goal type, and completion status are required!"}), 400
-
-    goal = UserGoal.query.filter_by(user_id=user_id, goal_name=goal_name, goal_type=goal_type).first()
-    if goal:
-        goal.completed = completed
-        db.session.commit()
-        return jsonify({"message": f"Goal '{goal_name}' marked as {'completed' if completed else 'not completed'}!"}), 200
-
-    return jsonify({"message": "Goal not found!"}), 404
 
 
 
@@ -694,6 +741,151 @@ def save_custom_workout():
         db.session.rollback()
         print(f"Error saving custom workout: {e}")
         return jsonify({"message": "Failed to save custom workout", "error": str(e)}), 500
+
+@app.route('/create_competition', methods=['POST'])
+def create_competition():
+    try:
+        data = request.get_json()
+        user_id = data.get('user_id')
+        name = data.get('name')
+        description = data.get('description', '')
+        visibility = data.get('visibility', 'public')
+
+        if not user_id or not name:
+            return jsonify({"message": "User ID and competition name are required!"}), 400
+
+        # Check if competition name is unique
+        existing_competition = Competition.query.filter_by(name=name).first()
+        if existing_competition:
+            return jsonify({"message": "Competition name already exists!"}), 400
+
+        new_competition = Competition(
+            name=name,
+            description=description,
+            visibility=visibility,
+            owner_id=user_id
+        )
+        db.session.add(new_competition)
+        db.session.commit()
+
+        return jsonify({"message": "Competition created successfully!"}), 201
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error creating competition: {e}")
+        return jsonify({"message": "Failed to create competition", "error": str(e)}), 500
+@app.route('/friends_goals', methods=['GET'])
+def get_friends_goals():
+    try:
+        user_id = request.args.get('user_id')
+        if not user_id:
+            return jsonify({"message": "User ID is required!"}), 400
+
+        # Get the current user's username
+        current_user = User.query.filter_by(id=user_id).first()
+        if not current_user:
+            return jsonify({"message": "User not found!"}), 404
+        current_username = current_user.username
+
+        # Fetch friends (both directions)
+        friends = db.session.query(User.username).filter(
+            (user_friends.user_id == current_username) & (user_friends.status == "Accepted")
+        ).union(
+            db.session.query(User.username).filter(
+                (user_friends.friend_id == current_username) & (user_friends.status == "Accepted")
+            )
+        ).all()
+
+        friend_usernames = [friend[0] for friend in friends]
+
+        # Fetch goals for all friends
+        friend_goals = []
+        for friend_username in friend_usernames:
+            friend = User.query.filter_by(username=friend_username).first()
+            if friend:
+                goals = UserGoal.query.filter_by(user_id=friend.id).all()
+                for goal in goals:
+                    friend_goals.append({
+                        "friend_username": friend.username,
+                        "goal_name": goal.goal_name,
+                        "goal_type": goal.goal_type,
+                        "progress": goal.progress,
+                        "completed": goal.completed
+                    })
+
+        return jsonify(friend_goals), 200
+    except Exception as e:
+        print(f"Error fetching friends' goals: {e}")
+        return jsonify({"message": "Failed to fetch friends' goals", "error": str(e)}), 500
+
+
+@app.route('/competitions', methods=['GET'])
+def get_competitions():
+    try:
+        user_id = request.args.get('user_id')
+        if not user_id:
+            return jsonify({"message": "User ID is required!"}), 400
+
+        # Get the username of the current user
+        current_user = User.query.filter_by(id=user_id).first()
+        if not current_user:
+            return jsonify({"message": "User not found!"}), 404
+
+        current_username = current_user.username
+
+        # Fetch the friends' usernames (check both directions)
+        friends = db.session.query(user_friends.user_id).filter(
+            (user_friends.friend_id == current_username) & (user_friends.status == "Accepted")
+        ).union(
+            db.session.query(user_friends.friend_id).filter(
+                (user_friends.user_id == current_username) & (user_friends.status == "Accepted")
+            )
+        ).all()
+
+        friend_usernames = [friend[0] for friend in friends]
+
+        # Query competitions
+        competitions = Competition.query.filter(
+            (Competition.visibility == 'public') |  # Public competitions
+            (Competition.owner_id == user_id) |  # Competitions owned by the user
+            ((Competition.visibility == 'private') & (Competition.owner_id.in_(
+                [User.query.filter_by(username=username).first().id for username in friend_usernames]
+            )))  # Private competitions owned by friends
+        ).all()
+
+        result = [
+            {
+                "id": comp.id,
+                "name": comp.name,
+                "description": comp.description,
+                "visibility": comp.visibility,
+                "owner_id": comp.owner_id,
+                "date_created": comp.date_created.strftime("%Y-%m-%d"),
+            }
+            for comp in competitions
+        ]
+        return jsonify(result), 200
+    except Exception as e:
+        print(f"Error fetching competitions: {e}")
+        return jsonify({"message": "Failed to fetch competitions", "error": str(e)}), 500
+
+
+@app.before_request
+def seed_default_competitions():
+    default_competitions = [
+        {"name": "Max Bench", "description": "Test your max bench press strength.", "visibility": "public", "owner_id": 1},
+        {"name": "Max Steps", "description": "Track who takes the most steps.", "visibility": "public", "owner_id": 1},
+        {"name": "Group X Class", "description": "Join a group fitness competition.", "visibility": "public", "owner_id": 1},
+        {"name": "Cycling Challenge", "description": "Cycle the longest distance.", "visibility": "public", "owner_id": 1},
+        {"name": "Swimming Contest", "description": "Swim the farthest distance.", "visibility": "public", "owner_id": 1},
+    ]
+
+    for comp in default_competitions:
+        # Check if the competition already exists
+        existing = Competition.query.filter_by(name=comp["name"]).first()
+        if not existing:
+            new_competition = Competition(**comp)
+            db.session.add(new_competition)
+    db.session.commit()
 
 
 @app.route('/login', methods=['POST'])

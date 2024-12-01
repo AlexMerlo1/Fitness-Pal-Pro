@@ -6,45 +6,27 @@ const CompetitionsPage = () => {
   const [leaderboard, setLeaderboard] = useState([]);
   const [userPerformance, setUserPerformance] = useState('');
   const [userId] = useState(localStorage.getItem('user_id')); // Assume user ID is stored in localStorage
+  const [competitions, setCompetitions] = useState([]);
+  const [showPopup, setShowPopup] = useState(false);
+  const [newCompetition, setNewCompetition] = useState({ name: '', description: '', visibility: 'public' });
 
-  const handleJoinCompetition = async (competitionName) => {
-    if (!userId) {
-      alert('User ID is missing. Please log in.');
-      return;
-    }
-  
-    const initialPerformance = prompt(`Enter your initial performance for ${competitionName}:`);
-    if (!initialPerformance) {
-      alert('Performance is required to join the competition.');
-      return;
-    }
-  
+  // Fetch all competitions (default and custom)
+  const fetchCompetitions = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/join_competition', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: userId,
-          competition_name: competitionName,
-          performance: parseFloat(initialPerformance),
-        }),
-      });
-  
+      const response = await fetch(`http://127.0.0.1:5000/competitions?user_id=${userId}`);
       const data = await response.json();
       if (response.ok) {
-        alert(`Successfully joined competition: ${competitionName}`);
-        fetchLeaderboard(competitionName); // Refresh leaderboard
+        setCompetitions(data);
       } else {
-        alert(data.message || 'Failed to join competition.');
+        console.error('Error fetching competitions:', data.message);
       }
     } catch (error) {
-      console.error('Error joining competition:', error);
-      alert('An error occurred while joining the competition.');
+      console.error('Error fetching competitions:', error);
     }
   };
-  
+
+  // Fetch leaderboard for a selected competition
   const fetchLeaderboard = async (competitionName) => {
-    console.log("Fetching leaderboard for:", competitionName); // Debug log
     try {
       const response = await fetch(`http://127.0.0.1:5000/leaderboard?competition_name=${competitionName}`);
       const data = await response.json();
@@ -59,12 +41,79 @@ const CompetitionsPage = () => {
     }
   };
 
+  // Handle joining a competition
+  const handleJoinCompetition = async (competitionName) => {
+    if (!userId) {
+      alert('User ID is missing. Please log in.');
+      return;
+    }
+
+    const initialPerformance = prompt(`Enter your initial performance for ${competitionName}:`);
+    if (!initialPerformance) {
+      alert('Performance is required to join the competition.');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://127.0.0.1:5000/join_competition', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id: userId,
+          competition_name: competitionName,
+          performance: parseFloat(initialPerformance),
+        }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert(`Successfully joined competition: ${competitionName}`);
+        fetchLeaderboard(competitionName); // Refresh leaderboard
+      } else {
+        alert(data.message || 'Failed to join competition.');
+      }
+    } catch (error) {
+      console.error('Error joining competition:', error);
+      alert('An error occurred while joining the competition.');
+    }
+  };
+
+  // Handle creating a new competition
+  const handleCreateCompetition = async () => {
+    if (!newCompetition.name || !userId) {
+      alert('Competition name and user ID are required!');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://127.0.0.1:5000/create_competition', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...newCompetition, user_id: userId }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        alert('Competition created successfully!');
+        setNewCompetition({ name: '', description: '', visibility: 'public' });
+        setShowPopup(false);
+        fetchCompetitions(); // Refresh competition list
+      } else {
+        alert(data.message || 'Failed to create competition.');
+      }
+    } catch (error) {
+      console.error('Error creating competition:', error);
+      alert('An error occurred while creating the competition.');
+    }
+  };
+
+  // Handle updating performance
   const handlePerformanceSubmit = async () => {
     if (!userPerformance) {
       alert('Please enter a performance value before submitting.');
       return;
     }
-  
+
     try {
       const response = await fetch('http://127.0.0.1:5000/update_performance', {
         method: 'POST',
@@ -75,7 +124,7 @@ const CompetitionsPage = () => {
           performance: parseFloat(userPerformance),
         }),
       });
-  
+
       const data = await response.json();
       if (response.ok) {
         alert('Performance updated successfully!');
@@ -88,10 +137,9 @@ const CompetitionsPage = () => {
       alert('An error occurred while updating performance.');
     }
   };
-  
-  
 
   useEffect(() => {
+    fetchCompetitions();
     if (selectedCompetition) {
       fetchLeaderboard(selectedCompetition);
     }
@@ -102,11 +150,46 @@ const CompetitionsPage = () => {
       <div className="top-bar">
         <h1>Competitions</h1>
       </div>
+      <button className="add-competition-button" onClick={() => setShowPopup(true)}>
+        Create Competition
+      </button>
+      {showPopup && (
+        <div className="popup">
+          <div className="popup-content">
+            <h2>Create a Competition</h2>
+            <input
+              type="text"
+              placeholder="Competition Name"
+              value={newCompetition.name}
+              onChange={(e) => setNewCompetition({ ...newCompetition, name: e.target.value })}
+            />
+            <textarea
+              placeholder="Description"
+              value={newCompetition.description}
+              onChange={(e) => setNewCompetition({ ...newCompetition, description: e.target.value })}
+            />
+            <select
+              value={newCompetition.visibility}
+              onChange={(e) => setNewCompetition({ ...newCompetition, visibility: e.target.value })}
+            >
+              <option value="public">Public</option>
+              <option value="private">Private</option>
+            </select>
+            <button onClick={handleCreateCompetition}>Create</button>
+            <button onClick={() => setShowPopup(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
       <div className="comp-info">
         <div className="competition-cards">
-          {['Max Bench', 'Max Steps', 'Group X Class', 'Cycling Challenge', 'Swimming Contest'].map((competition, index) => (
-            <button key={index} className="competition-card" onClick={() => setSelectedCompetition(competition)}>
-              {competition}
+          {competitions.map((competition) => (
+            <button
+              key={competition.id}
+              className="competition-card"
+              onClick={() => setSelectedCompetition(competition.name)}
+            >
+              <h3>{competition.name}</h3>
+              <p>{competition.description}</p>
             </button>
           ))}
         </div>
