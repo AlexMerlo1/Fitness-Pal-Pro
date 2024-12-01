@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Workouts.css';
 import TopBar from '../TopBar/TopBar.jsx';
-
+import axios from 'axios';
 function Workouts() {
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [showCustomWorkoutPopup, setShowCustomWorkoutPopup] = useState(false);
@@ -44,22 +44,46 @@ function Workouts() {
     setShowCustomWorkoutPopup(true);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const newWorkout = {
-      workout,
-      sets,
-      reps,
-      weight,
+      workout_name: workout,
+      sets: sets,
+      reps: reps,
+      weight: weight,
     };
-    setWorkoutLog([...workoutLog, newWorkout]);
-
-    setWorkout("");
-    setSets("");
-    setReps("");
-    setWeight("");
-    setShowCustomWorkoutPopup(false);
+  
+    const token = localStorage.getItem('token');  
+  
+    try {
+      const response = await axios.post(
+        'http://localhost:5000/create_custom_workout', 
+        newWorkout,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`, 
+          }
+        }
+      );
+      
+      if (response.status === 201) {
+        // Add the workout to the workout log if the request is successful
+        setWorkoutLog([...workoutLog, newWorkout]);
+        
+        // Reset the form fields
+        setWorkout("");
+        setSets("");
+        setReps("");
+        setWeight("");
+        setShowCustomWorkoutPopup(false);
+  
+        console.log("Workout successfully saved:", response.data);
+      } else {
+        console.error("Failed to save workout:", response);
+      }
+    } catch (error) {
+      console.error("Error saving workout:", error);
+    }
   };
-
   const startWorkout = (plan) => {
     const exercises = workoutPlansData[plan] || [];
     const totalSetsCount = exercises.reduce((sum, exercise) => sum + exercise.sets, 0);
