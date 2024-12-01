@@ -133,7 +133,7 @@ function Workouts() {
       <div className="workout-container">
         <div className="middle-div">
           <div className="workout-plans">
-            {[1, 2, 3, 4, 5, 6].map((number) => (
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((number) => (
               <div key={number} className="workout-plan">
                 <h3>Workout Plan {number}</h3>
                 <p>Workout description</p>

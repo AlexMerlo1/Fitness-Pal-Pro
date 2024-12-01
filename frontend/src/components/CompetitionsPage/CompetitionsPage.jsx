@@ -16,7 +16,7 @@ const CompetitionsPage2 = () => {
 
         <div class="comp-info">
             <div className="Search-div">
-                <div className="Search-bar">Search|</div>
+                <input className="Comp-search-bar" type="text" placeholder="Search Competitions"/>
                 <div class="competition-cards">
                     <button class="competition-card">Max Bench</button>
                     <button class="competition-card">Max Steps</button>

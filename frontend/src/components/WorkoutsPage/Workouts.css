@@ -154,6 +154,8 @@ body {
   grid-template-columns: repeat(2, 1fr);
   gap: 20px;
   flex: 2;
+  height: 100%;
+  padding-bottom:20px;
 }
 
 .workout-plan {
