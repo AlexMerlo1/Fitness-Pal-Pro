@@ -1,0 +1,209 @@
+.goals-container {
+    width: 100%;
+    height: 100vh; /* Full viewport height */
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto; /* Enable vertical scrolling if content overflows */
+  }
+  
+  .milestones-body {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping for smaller screens */
+    gap: 20px;
+    padding: 20px;
+  }
+  
+  .left-column,
+  .right-column {
+    flex: 1; /* Let columns take equal space */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow-y: auto; /* Enable scrolling for content inside the column */
+    max-height: calc(100vh - 40px); /* Ensure columns fit within viewport */
+  }
+  
+  .skill-button {
+    width: 150px; /* Set uniform width */
+    height: 150px; /* Set uniform height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #246CBE;
+    backdrop-filter: blur(30px);
+    border-radius: 15px;
+    font-size: 1.2em; /* Adjust font size */
+    color: white;
+    border: 2px solid white;
+    margin: 10px;
+    transition: background-color 0.2s ease-in-out, transform 0.3s ease-in-out;
+  }
+  
+  .skill-button.selected {
+    background-color: #28a745;
+    border-color: #28a745;
+  }
+  
+  .skill-button:hover {
+    background-color: #FD760F;
+    transform: scale(1.05);
+  }
+  
+  .goal-item {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: transparent;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .progress-bar {
+    background-color: transparent;
+    border: none;
+    height: 20px;
+    margin: 5px 0;
+    width: 100%; /* Ensure full-width alignment */
+    position: relative;
+    overflow: hidden; /* Prevent overflow issues */
+  }
+  
+  .progress {
+    background-color: #4caf50;
+    height: 100%; /* Match the height of the progress-bar */
+    border-radius: 5px 0 0 5px; /* Smooth edges for the filled bar */
+    transition: width 0.3s ease; /* Smooth transition for progress updates */
+  }
+  
+  .scroller {
+    max-width: 100%;
+    overflow: hidden;
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping for smaller screens */
+    align-items: center;
+    justify-content: center; /* Center buttons */
+    gap: 15px; /* Space between buttons */
+  }
+  
+  input[type="range"] {
+    width: 90%;
+    margin: 10px 0;
+  }
+  
+  h1 {
+    text-align: center;
+    font-size: 4.5em;
+    margin-bottom: 50px;
+  }
+  
+  .weekly-container,
+  .monthly-container {
+    text-align: center;
+    margin-bottom: 2em;
+  }
+  
+  .button-submit,
+  .add-goal-button,
+  .view-friends-button {
+    background: transparent;
+    backdrop-filter: blur(30px);
+    border: 2px solid white;
+    outline: none;
+    border-radius: 40px;
+    cursor: pointer;
+    font-size: 16px;
+    height: 50%;
+    color: white;
+    font-weight: 700;
+    padding: 20px;
+    text-align: center;
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  }
+  
+  .button-submit:hover,
+  .add-goal-button:hover,
+  .view-friends-button:hover {
+    border: 2px solid black;
+    color: black;
+  }
+  
+  .popup-content h2 {
+    margin-bottom: 20px;
+  }
+  
+  .graphs-body {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive graph layout */
+    gap: 20px;
+    padding-top: 0; /* Align graphs directly under the header */
+  }
+  
+  .graph-div {
+    background: transparent;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .graph-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  
+  .zoom-button {
+    cursor: pointer;
+    font-size: 1.2em;
+  }
+  
+  .data-button {
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s ease;
+  }
+  
+  .data-button:hover {
+    background-color: #0056b3;
+  }
+  
+  @media (max-height: 800px) {
+    h1 {
+      font-size: 3em; /* Scale header font size */
+      margin-bottom: 30px;
+    }
+  
+    .button-submit,
+    .add-goal-button {
+      padding: 10px 15px; /* Reduce padding for smaller buttons */
+      font-size: 14px;
+    }
+  
+    .left-column,
+    .right-column {
+      max-height: calc(100vh - 120px); /* Adjust for smaller viewports */
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .milestones-body {
+      flex-direction: column; /* Stack columns vertically */
+    }
+  
+    .left-column,
+    .right-column {
+      width: 100%;
+    }
+  
+    .graphs-body {
+      grid-template-columns: 1fr; /* Single-column layout */
+    }
+  }
+  
