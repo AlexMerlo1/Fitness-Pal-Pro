@@ -95,13 +95,16 @@ body {
 
 .customWorkout {
   background-color: var(--yellow);
+  display: flex;
+  justify-content: center;
   color: #000;
   width: 250px;
-  height: 80px;
   padding: 10px 20px;
   border: none;
+  align-items: center;
   border-radius: 20px;
   cursor: pointer;
+  text-align: center;
   position: relative;
   font-size: 18px;
   margin:auto;
@@ -183,12 +186,21 @@ body {
   flex: 1;
   background-color: var(--lightgray);
   margin: 20px;
+  text-align: center;
   margin-top: 0px;
-  /* margin-right: 20px; */
   padding: 20px;
   border-radius: 10px;
+
   /* height: 100%; */
 
+}
+.workout-log ul {
+  border: 1px solid #ddd; 
+  flex-direction: column;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  max-height: 100%; 
+  overflow-y: auto;  
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .popup-overlay {
@@ -203,7 +215,50 @@ body {
   justify-content: center;
   z-index: 1000;
 }
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
 
+li.exercise-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin: 8px 0;
+  padding: 12px;
+  line-height: 1.6;
+}
+
+.exercise-info {
+  flex-grow: 1;
+  color: #333;
+}
+
+.play-button a {
+  display: inline-block;
+  font-size: 18px;
+  color: #007bff;
+  text-decoration: none;
+  background: #f1f1f1;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.play-button a:hover {
+  background-color: #007bff;
+  color: #fff;
+  transform: scale(1.1);
+}
 .popup-content {
   background-color: var(--lightgray);
   padding: 20px;
@@ -265,7 +320,15 @@ body {
   border-radius: 10px;
   margin: 10px auto;
 }
-
+.play-button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.play-button p {
+  color: black;
+}
 .progress-fill {
   height: 100%;
   background-color: var(--yellow);

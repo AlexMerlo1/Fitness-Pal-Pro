@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 from flask import Flask, request, jsonify
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import desc
 import traceback
 from flask_cors import CORS
 import jwt
@@ -45,6 +46,26 @@ class user_workouts(db.Model):
     weight = db.Column(db.Integer, nullable=False)
     reps = db.Column(db.Integer, nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
+class WorkoutPlan(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    created_by = db.Column(db.String, nullable=False)
+    workout_name = db.Column(db.String, nullable=False)
+    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # Relationship to Exercise model (One-to-Many)
+    exercises = db.relationship('Exercise', backref='workout_plan', lazy=True)
+
+# Define the Exercise model
+class Exercise(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    exercise_name = db.Column(db.String, nullable=False)
+    sets = db.Column(db.Integer, nullable=False)
+    reps = db.Column(db.Integer, nullable=False)
+    weight = db.Column(db.String, nullable=False)
+    video_link = db.Column(db.String, nullable=True)
+    
+    # Foreign key to link to WorkoutPlan
+    workout_plan_id = db.Column(db.Integer, db.ForeignKey('workout_plan.id'), nullable=False)
 
 def get_jwt_token(request):
     # Extract the JWT token from the Authorization header
@@ -60,11 +81,11 @@ def get_jwt_token(request):
         return user_id
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         return jsonify({"message": "Invalid or expired token!"}), 401
-    
 
 @app.before_request
 def create_tables():
     db.create_all()
+
 @app.route('/register', methods=['POST'])
 def register():
     try:
@@ -164,6 +185,74 @@ def add_friend():
         print(f"Error during adding friend: {e}")
         print(traceback.format_exc())
         return jsonify({"message": "Internal server error"}), 500
+@app.route('/get_workout_log', methods=['GET'])
+def get_workout_log():
+    try:
+        user_id = get_jwt_token(request)
+        
+        # Retrieve the user details based on user_id
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({"message": "User not found!"}), 404
+
+        # Retrieve the user's workouts from the database
+        workouts = user_workouts.query.filter_by(created_by=user_id).order_by(desc(user_workouts.date_created)).all()
+
+        if not workouts:
+            return jsonify({"message": "No workouts found for this user!"}), 404
+        
+        # Prepare the workout log data
+        workout_log = []
+        for workout in workouts:
+            workout_data = {
+                "workout_name": workout.workout_name,
+                "sets": workout.sets,
+                "reps": workout.reps,
+                "weight": workout.weight,
+                "date_created": workout.date_created.isoformat()  
+            }
+            workout_log.append(workout_data)
+        return jsonify({"workouts": workout_log}), 200
+
+    except Exception as e:
+        print(f"Error fetching workout log: {e}")
+        return jsonify({"message": "Internal server error", "error": str(e)}), 500
+
+
+@app.route('/get_workout_plans', methods=['GET'])
+def get_workout_plan():
+    # Retrieve all workout plans from the database
+    workout_plans = WorkoutPlan.query.all()
+
+    # Create a list to hold the response data
+    response_data = []
+
+    for workout in workout_plans:
+        workout_data = {
+            "id": workout.id,
+            "created_by": workout.created_by,
+            "workout_name": workout.workout_name,
+            "date_created": workout.date_created,
+            "exercises": []  
+        }
+
+        # Adding exercises related to this workout plan
+        for exercise in workout.exercises:
+            exercise_data = {
+                "exercise_name": exercise.exercise_name,
+                "sets": exercise.sets,
+                "reps": exercise.reps,
+                "weight": exercise.weight,
+                "video_link": exercise.video_link
+            }
+            workout_data["exercises"].append(exercise_data)
+        # Append the workout data to the response list
+        response_data.append(workout_data)
+    
+    # Return the data as a JSON response
+    return jsonify(response_data)
+
+
 
 @app.route('/notifications', methods=['GET'])
 def get_pending_friend_requests():
@@ -297,7 +386,7 @@ def get_profile(friend_id):
         # Count the number of accepted friends
         friend_count = user_friends.query.filter(
             ((user_friends.user_id == user.username) | (user_friends.friend_id == user.username)) & 
-            (user_friends.status == 'accepted')
+            (user_friends.status == 'Accepted')
         ).count()
         
         # Query the latest workouts (limit to last 5 workouts ordered by date)
