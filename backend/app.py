@@ -67,6 +67,25 @@ class Exercise(db.Model):
     # Foreign key to link to WorkoutPlan
     workout_plan_id = db.Column(db.Integer, db.ForeignKey('workout_plan.id'), nullable=False)
 
+class Competition(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False, unique=True)
+    description = db.Column(db.String, nullable=True)
+    visibility = db.Column(db.String, default='public')  # 'public' or 'private'
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    start_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    end_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow() + timedelta(days=30))
+    owner = db.relationship('User', backref='owned_competitions', lazy=True)
+
+class Award(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    competition_id = db.Column(db.Integer, db.ForeignKey('competition.id'), nullable=False)
+    rank = db.Column(db.Integer, nullable=False)
+    reward = db.Column(db.String, nullable=False)
+
+    competition = db.relationship('Competition', backref='awards', lazy=True)
+
 def get_jwt_token(request):
     # Extract the JWT token from the Authorization header
     token = request.headers.get('Authorization')
@@ -337,7 +356,388 @@ def accept_friend_request():
     except Exception as e:
         db.session.rollback()  # Rollback in case of error
         return jsonify({"error": str(e)}), 500
+@app.route('/challenges', methods=['GET'])
+def get_challenges():
+    try:
+        challenges = Challenge.query.all()
+        result = [
+            {"id": challenge.id, "title": challenge.title, "description": challenge.description, "reward": challenge.reward}
+            for challenge in challenges
+        ]
+        return jsonify(result), 200
+    except Exception as e:
+        print(f"Error fetching challenges: {e}")
+        return jsonify({"message": "Failed to fetch challenges"}), 500
 
+
+@app.route('/has_joined', methods=['GET'])
+def has_joined():
+    user_id = request.args.get('user_id')
+    competition_name = request.args.get('competition_name')
+
+    if not user_id or not competition_name:
+        return jsonify({"message": "User ID and competition name are required"}), 400
+
+    competition = Competition.query.filter_by(name=competition_name).first()
+    if not competition:
+        return jsonify({"message": "Competition not found"}), 404
+
+    user_competition = UserCompetition.query.filter_by(
+        user_id=user_id, competition_id=competition.id
+    ).first()
+
+    return jsonify({"has_joined": user_competition is not None}), 200
+
+
+@app.route('/join_competition', methods=['POST'])
+def join_competition():
+    try:
+        data = request.get_json()
+        user_id = data.get('user_id')
+        competition_name = data.get('competition_name')
+        performance = data.get('performance')
+
+        if not user_id or not competition_name or performance is None:
+            return jsonify({"message": "User ID, competition name, and performance are required!"}), 400
+
+        competition = Competition.query.filter_by(name=competition_name).first()
+        if not competition:
+            return jsonify({"message": "Competition not found!"}), 404
+
+        existing_entry = UserCompetition.query.filter_by(
+            user_id=user_id, competition_id=competition.id
+        ).first()
+        if existing_entry:
+            return jsonify({"message": "User has already joined this competition!"}), 400
+
+        new_entry = UserCompetition(
+            user_id=user_id,
+            competition_id=competition.id,
+            performance=performance
+        )
+        db.session.add(new_entry)
+        db.session.commit()
+
+        return jsonify({"message": "Joined competition successfully!"}), 201
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error joining competition: {e}")
+        return jsonify({"message": "Failed to join competition", "error": str(e)}), 500
+    
+
+@app.route('/leaderboard', methods=['GET'])
+def leaderboard():
+    try:
+        competition_name = request.args.get('competition_name')
+        if not competition_name:
+            return jsonify({"message": "Competition name is required!"}), 400
+
+        # Fetch the competition
+        competition = Competition.query.filter_by(name=competition_name).first()
+        if not competition:
+            return jsonify({"message": "Competition not found!"}), 404
+
+        # Get leaderboard entries for the competition
+        leaderboard = (
+            db.session.query(User.username, UserCompetition.performance)
+            .join(UserCompetition, User.id == UserCompetition.user_id)
+            .filter(UserCompetition.competition_id == competition.id)
+            .order_by(UserCompetition.performance.desc())  # Sort by performance
+            .all()
+        )
+
+        # Format the leaderboard data
+        result = [
+            {"username": entry.username, "performance": entry.performance}
+            for entry in leaderboard
+        ]
+        return jsonify(result), 200
+    except Exception as e:
+        print(f"Error fetching leaderboard: {e}")
+        return jsonify({"message": "Failed to fetch leaderboard", "error": str(e)}), 500
+
+@app.route('/create_competition', methods=['POST'])
+def create_competition():
+    try:
+        data = request.get_json()
+        user_id = data.get('user_id')
+        name = data.get('name')
+        description = data.get('description', '')
+        visibility = data.get('visibility', 'public')
+        start_date = data.get('start_date')
+        end_date = data.get('end_date')
+        awards = data.get('awards', [])
+
+        if not user_id or not name or not start_date or not end_date:
+            return jsonify({"message": "Missing required fields!"}), 400
+
+        new_competition = Competition(
+            name=name,
+            description=description,
+            visibility=visibility,
+            owner_id=user_id,
+            start_date=datetime.fromisoformat(start_date),
+            end_date=datetime.fromisoformat(end_date),
+        )
+        db.session.add(new_competition)
+        db.session.commit()
+
+        for award in awards:
+            new_award = Award(
+                competition_id=new_competition.id,
+                rank=award['rank'],
+                reward=award['reward'],
+            )
+            db.session.add(new_award)
+
+        db.session.commit()
+        return jsonify({"message": "Competition created successfully!"}), 201
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error creating competition: {e}")
+        return jsonify({"message": "Failed to create competition", "error": str(e)}), 500
+@app.route('/user_competitions_log', methods=['GET'])
+def user_competitions_log():
+    user_id = request.args.get('user_id')
+    if not user_id:
+        return jsonify({"message": "User ID is required!"}), 400
+
+    log_entries = (
+        db.session.query(
+            Competition.name.label('competition_name'),
+            UserCompetition.performance,
+            db.func.rank().over(
+                partition_by=UserCompetition.competition_id,
+                order_by=UserCompetition.performance.desc()
+            ).label('rank')
+        )
+        .join(UserCompetition, Competition.id == UserCompetition.competition_id)
+        .filter(UserCompetition.user_id == user_id)
+        .all()
+    )
+
+    result = [
+        {
+            "competition_name": entry.competition_name,
+            "performance": entry.performance,
+            "rank": entry.rank
+        }
+        for entry in log_entries
+    ]
+
+    return jsonify(result), 200
+@app.route('/competitions', methods=['GET'])
+def get_competitions():
+    try:
+        user_id = request.args.get('user_id')
+        if not user_id:
+            return jsonify({"message": "User ID is required!"}), 400
+
+        # Get the username of the current user
+        current_user = User.query.filter_by(id=user_id).first()
+        if not current_user:
+            return jsonify({"message": "User not found!"}), 404
+
+        current_username = current_user.username
+
+        # Fetch the friends' usernames (check both directions)
+        friends = db.session.query(user_friends.user_id).filter(
+            (user_friends.friend_id == current_username) & (user_friends.status == "Accepted")
+        ).union(
+            db.session.query(user_friends.friend_id).filter(
+                (user_friends.user_id == current_username) & (user_friends.status == "Accepted")
+            )
+        ).all()
+
+        friend_usernames = [friend[0] for friend in friends]
+
+        # Query competitions
+        competitions = Competition.query.filter(
+            (Competition.visibility == 'public') |  # Public competitions
+            (Competition.owner_id == user_id) |  # Competitions owned by the user
+            ((Competition.visibility == 'private') & (Competition.owner_id.in_(
+                [User.query.filter_by(username=username).first().id for username in friend_usernames]
+            )))  # Private competitions owned by friends
+        ).all()
+
+        result = [
+            {
+                "id": comp.id,
+                "name": comp.name,
+                "description": comp.description,
+                "visibility": comp.visibility,
+                "owner_id": comp.owner_id,
+                "date_created": comp.date_created.strftime("%Y-%m-%d"),  # Only date
+                "start_date": comp.start_date.strftime("%Y-%m-%d"),  # Only date
+                "end_date": comp.end_date.strftime("%Y-%m-%d"),  # Only date
+            }
+            for comp in competitions
+        ]
+        return jsonify(result), 200
+    except Exception as e:
+        print(f"Error fetching competitions: {e}")
+        return jsonify({"message": "Failed to fetch competitions", "error": str(e)}), 500
+
+
+@app.before_request
+def seed_default_competitions():
+    default_competitions = [
+        {
+            "name": "Max Bench",
+            "description": "Test your max bench press strength.",
+            "visibility": "public",
+            "owner_id": 1,
+            "start_date": datetime.utcnow(),
+            "end_date": datetime.utcnow() + timedelta(days=30),
+            "awards": [
+                {"rank": 1, "reward": "$25 gift card"},
+                {"rank": 2, "reward": "$15 gift card"},
+                {"rank": 3, "reward": "$10 gift card"},
+            ],
+        },
+        {
+            "name": "Max Steps",
+            "description": "Track who takes the most steps.",
+            "visibility": "public",
+            "owner_id": 1,
+            "start_date": datetime.utcnow(),
+            "end_date": datetime.utcnow() + timedelta(days=15),
+            "awards": [
+                {"rank": 1, "reward": "Fitness Tracker"},
+                {"rank": 2, "reward": "$20 gift card"},
+                {"rank": 3, "reward": "Water Bottle"},
+            ],
+        },
+        {
+            "name": "Group X Class",
+            "description": "Join a group fitness competition.",
+            "visibility": "public",
+            "owner_id": 1,
+            "start_date": datetime.utcnow(),
+            "end_date": datetime.utcnow() + timedelta(days=45),
+            "awards": [
+                {"rank": 1, "reward": "Free Gym Membership"},
+                {"rank": 2, "reward": "$50 gift card"},
+                {"rank": 3, "reward": "Workout T-Shirt"},
+            ],
+        },
+    ]
+
+    for comp_data in default_competitions:
+        existing_comp = Competition.query.filter_by(name=comp_data["name"]).first()
+        if not existing_comp:
+            new_comp = Competition(
+                name=comp_data["name"],
+                description=comp_data["description"],
+                visibility=comp_data["visibility"],
+                owner_id=comp_data["owner_id"],
+                date_created=datetime.utcnow(),
+                start_date=comp_data["start_date"],
+                end_date=comp_data["end_date"],
+            )
+            db.session.add(new_comp)
+            db.session.flush()  # Get the competition ID
+
+            # Add associated awards
+            for award_data in comp_data["awards"]:
+                new_award = Award(
+                    competition_id=new_comp.id,
+                    rank=award_data["rank"],
+                    reward=award_data["reward"],
+                )
+                db.session.add(new_award)
+
+    db.session.commit()
+
+
+@app.route('/awards', methods=['GET'])
+def get_awards():
+    try:
+        competition_name = request.args.get('competition_name')
+        if not competition_name:
+            return jsonify({"message": "Competition name is required!"}), 400
+
+        # Find the competition
+        competition = Competition.query.filter_by(name=competition_name).first()
+        if not competition:
+            return jsonify({"message": "Competition not found!"}), 404
+
+        # Fetch associated awards
+        awards = Award.query.filter_by(competition_id=competition.id).all()
+        result = [{"rank": award.rank, "reward": award.reward} for award in awards]
+        return jsonify(result), 200
+    except Exception as e:
+        print(f"Error fetching awards: {e}")
+        return jsonify({"message": "Failed to fetch awards", "error": str(e)}), 500
+    
+
+@app.route('/update_performance', methods=['POST'])
+def update_performance():
+    try:
+        data = request.get_json()
+        user_id = data.get('user_id')
+        competition_name = data.get('competition_name')
+        performance = data.get('performance')
+
+        if not user_id or not competition_name or performance is None:
+            return jsonify({"message": "User ID, competition name, and performance are required!"}), 400
+
+        # Fetch the competition
+        competition = Competition.query.filter_by(name=competition_name).first()
+        if not competition:
+            return jsonify({"message": "Competition not found!"}), 404
+
+        # Fetch the user competition entry
+        competition_entry = UserCompetition.query.filter_by(
+            user_id=user_id, competition_id=competition.id
+        ).first()
+
+        if not competition_entry:
+            return jsonify({"message": "User is not part of this competition!"}), 404
+
+        # Update the performance
+        competition_entry.performance = performance
+        db.session.commit()
+        return jsonify({"message": "Performance updated successfully!"}), 200
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error updating performance: {e}")
+        return jsonify({"message": "Failed to update performance", "error": str(e)}), 500
+
+@app.route('/get_workouts', methods=['GET'])
+def get_workouts():
+    try:
+        user_id = request.args.get('user_id')
+        if not user_id:
+            return jsonify({"message": "User ID is required!"}), 400
+
+        # Prebuilt workouts
+        prebuilt_workouts = [
+            {"id": 1, "name": "Bench Press", "sets": 3, "reps": 10, "weight": 135},
+            {"id": 2, "name": "Squats", "sets": 3, "reps": 12, "weight": 185},
+            {"id": 3, "name": "Deadlift", "sets": 4, "reps": 8, "weight": 225},
+        ]
+
+        # Custom workouts for the user
+        custom_workouts = CustomWorkout.query.filter_by(user_id=user_id).all()
+        custom_workouts_data = [
+            {"id": cw.id, "name": cw.name, "sets": cw.sets, "reps": cw.reps, "weight": cw.weight}
+            for cw in custom_workouts
+        ]
+
+        return jsonify({"prebuilt": prebuilt_workouts, "custom": custom_workouts_data}), 200
+    except Exception as e:
+        print(f"Error fetching workouts: {e}")
+        return jsonify({"message": "Failed to fetch workouts", "error": str(e)}), 500
+
+
+
+
+@app.route('/leaderboard_goal', methods=['GET'])
+def get_leaderboard():
+    goals = db.session.query(UserGoal.user_id, db.func.sum(UserGoal.progress).label('total_progress')).group_by(UserGoal.user_id).order_by(db.desc('total_progress')).all()
+    leaderboard = [{"user_id": goal[0], "total_progress": goal[1]} for goal in goals]
+    return jsonify(leaderboard), 200
 
 @app.route('/login', methods=['POST'])
 def login():
