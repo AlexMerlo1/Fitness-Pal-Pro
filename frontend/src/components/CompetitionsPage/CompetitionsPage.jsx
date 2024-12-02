@@ -160,7 +160,8 @@ const CompetitionsPage = () => {
     }
   };
 
-  const handleCreateCompetition = async () => {
+  const handleCreateCompetition = async (e) => {
+    e.preventDefault(); // Prevent form submission refresh
     if (!newCompetition.name || !userId) {
       alert('Competition name and user ID are required!');
       return;
