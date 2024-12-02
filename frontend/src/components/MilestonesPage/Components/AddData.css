@@ -1,64 +1,89 @@
-.add-Data-overlay {
+.add-data-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
-.addData-container {
-  background: var(--lightgray);
+.add-data-container {
+  background: #333; /* Dark gray background for popup */
   padding: 20px;
   border-radius: 10px;
-  width: 20%;
-  height: 40%;
+  width: 90%;
+  max-width: 400px;
+  color: #fff;
   text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  animation: fadeIn 0.3s ease-in-out;
+  position: relative;
 }
 
-.close-Button {
-  width: 30px; 
-  height: 30px;
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
   background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 50%; 
+  border-radius: 50%;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1.2em; 
-  font-weight: bold;
-  text-align: center;
+  font-size: 1.5em;
 }
 
 .close-button:hover {
   background-color: #0056b3;
 }
 
-.addData-container {
-  background-color: var(--lightgray);
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-  width: 300px;
-  color: #fff;
-}
-
-.addData-container label {
+.add-data-container label {
   display: block;
   margin-bottom: 10px;
   color: #fff;
+  font-weight: bold;
 }
 
-.addData-container input {
+.add-data-container input {
   width: 100%;
-  padding: 5px;
+  padding: 10px;
   margin-top: 5px;
   margin-bottom: 15px;
   border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+.enter-button {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: #fff;
   border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.enter-button:hover {
+  background-color: #45a049;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

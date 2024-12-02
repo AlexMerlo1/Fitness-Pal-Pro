@@ -97,6 +97,37 @@ class UserCompetition(db.Model):
     user = db.relationship('User', backref='user_competitions', lazy=True)
     competition = db.relationship('Competition', backref='user_competitions', lazy=True)
 
+class GraphData(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    graph_type = db.Column(db.String, nullable=False)  # Example: 'Body Weight'
+    data = db.Column(db.JSON, nullable=False)  # Store graph data as JSON
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+class GraphingData(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Foreign key to the User table
+    graph_type = db.Column(db.String, nullable=False)  # e.g., 'Body Weight', 'Workout Duration'
+    values = db.Column(db.JSON, nullable=False, default=[0, 0, 0, 0, 0, 0, 0])  # Store an array of 7 values
+
+    user = db.relationship('User', backref='graph_data')
+
+class UserGoal(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    goal_name = db.Column(db.String, nullable=False)
+    goal_type = db.Column(db.String, nullable=False)  # 'weekly' or 'monthly'
+    date_selected = db.Column(db.DateTime, default=datetime.utcnow)
+    completed = db.Column(db.Boolean, default=False) # True if goal is completed
+    # Relationships
+    user = db.relationship('User', backref='user_goals', lazy=True)
+    progress = db.Column(db.Integer, default=0)
+
+class GoalProgress(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_goal_id = db.Column(db.Integer, db.ForeignKey('user_goal.id'), nullable=False)
+    progress = db.Column(db.Integer, nullable=False)
+    date = db.Column(db.DateTime, default=datetime.utcnow)
 
 def get_jwt_token(request):
     # Extract the JWT token from the Authorization header
@@ -117,6 +148,35 @@ def get_jwt_token(request):
 def create_tables():
     db.create_all()
 
+# Route to fetch graphing data for a specific user and graph type
+@app.route('/api/graph-data/<int:user_id>/<string:graph_type>', methods=['GET'])
+def get_graph_data(user_id, graph_type):
+    graph_data = GraphingData.query.filter_by(user_id=user_id, graph_type=graph_type).first()
+    if not graph_data:
+        # Return default values if no data exists
+        return jsonify([0, 0, 0, 0, 0, 0, 0])
+    return jsonify(graph_data.values)
+
+
+# Route to update graphing data for a specific user and graph type
+@app.route('/api/graph-data/<int:user_id>/<string:graph_type>', methods=['POST'])
+def update_graph_data(user_id, graph_type):
+    data = request.get_json()
+    values = data.get('values', [0, 0, 0, 0, 0, 0, 0])
+
+    # Check if a record already exists
+    graph_data = GraphingData.query.filter_by(user_id=user_id, graph_type=graph_type).first()
+    if graph_data:
+        graph_data.values = values
+    else:
+        # Create a new record if none exists
+        graph_data = GraphingData(user_id=user_id, graph_type=graph_type, values=values)
+        db.session.add(graph_data)
+
+    db.session.commit()
+    return jsonify({'message': 'Graph data updated successfully'})
+
+    
 @app.route('/register', methods=['POST'])
 def register():
     try:
@@ -436,7 +496,130 @@ def join_competition():
         print(f"Error joining competition: {e}")
         return jsonify({"message": "Failed to join competition", "error": str(e)}), 500
     
+@app.route('/update_goal_progress', methods=['POST'])
+def update_goal_progress():
+    try:
+        data = request.get_json()
+        user_id = data.get('user_id')
+        goal_name = data.get('goal_name')
+        progress = data.get('progress')
 
+        if not user_id or not goal_name or progress is None:
+            return jsonify({"message": "User ID, goal name, and progress are required!"}), 400
+
+        goal = UserGoal.query.filter_by(user_id=user_id, goal_name=goal_name).first()
+        if not goal:
+            return jsonify({"message": "Goal not found!"}), 404
+
+        goal.progress = progress
+        goal.completed = progress >= 100
+        db.session.commit()
+
+        return jsonify({"message": "Goal progress updated successfully!"}), 200
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error updating goal progress: {e}")
+        return jsonify({"message": "Failed to update goal progress", "error": str(e)}), 500
+
+@app.route('/get_goal_progress', methods=['GET'])
+def get_goal_progress():
+    user_id = request.args.get('user_id')
+    if not user_id:
+        return jsonify({"message": "User ID is required!"}), 400
+
+    goals = UserGoal.query.filter_by(user_id=user_id).all()
+    return jsonify([
+        {"name": goal.goal_name, "type": goal.goal_type, "progress": goal.progress, "completed": goal.completed}
+        for goal in goals
+    ]), 200
+
+@app.route('/select_weekly_goal', methods=['POST'])
+def select_weekly_goal():
+    try:
+        data = request.get_json()
+        user_id = data.get('user_id')
+        goal_name = data.get('goal_name')
+
+        if not user_id or not goal_name:
+            return jsonify({"message": "User ID and goal name are required!"}), 400
+
+        new_goal = UserGoal(user_id=user_id, goal_name=goal_name, goal_type='weekly')
+        db.session.add(new_goal)
+        db.session.commit()
+
+        return jsonify({"message": "Weekly goal selected successfully!"}), 201
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error selecting weekly goal: {e}")
+        return jsonify({"message": "Failed to select weekly goal"}), 500
+
+@app.route('/select_monthly_goal', methods=['POST'])
+def select_monthly_goal():
+    try:
+        data = request.get_json()
+        user_id = data.get('user_id')
+        goal_name = data.get('goal_name')
+
+        if not user_id or not goal_name:
+            return jsonify({"message": "User ID and goal name are required!"}), 400
+
+        new_goal = UserGoal(user_id=user_id, goal_name=goal_name, goal_type='monthly')
+        db.session.add(new_goal)
+        db.session.commit()
+
+        return jsonify({"message": "Monthly goal selected successfully!"}), 201
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error selecting monthly goal: {e}")
+        return jsonify({"message": "Failed to select monthly goal"}), 500
+
+@app.route('/add_goal', methods=['POST'])
+def add_goal():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    goal_name = data.get('goal_name')
+    goal_type = data.get('goal_type')
+
+    if not user_id or not goal_name or not goal_type:
+        return jsonify({"message": "User ID, goal name, and goal type are required!"}), 400
+
+    new_goal = UserGoal(user_id=user_id, goal_name=goal_name, goal_type=goal_type)
+    db.session.add(new_goal)
+    db.session.commit()
+
+    return jsonify({"message": f"Goal '{goal_name}' added successfully!"}), 201
+
+@app.route('/remove_goal', methods=['POST'])
+def remove_goal():
+    data = request.get_json()
+    user_id = data.get('user_id')
+    goal_name = data.get('goal_name')
+    goal_type = data.get('goal_type')
+
+    if not user_id or not goal_name or not goal_type:
+        return jsonify({"message": "User ID, goal name, and goal type are required!"}), 400
+
+    goal = UserGoal.query.filter_by(user_id=user_id, goal_name=goal_name, goal_type=goal_type).first()
+    if goal:
+        db.session.delete(goal)
+        db.session.commit()
+        return jsonify({"message": f"Goal '{goal_name}' removed successfully!"}), 200
+
+    return jsonify({"message": "Goal not found!"}), 404
+
+@app.route('/get_user_goals', methods=['GET'])
+def get_user_goals():
+    user_id = request.args.get('user_id')
+    if not user_id:
+        return jsonify({"message": "User ID is required!"}), 400
+
+    goals = UserGoal.query.filter_by(user_id=user_id).all()
+    return jsonify([
+        {"name": goal.goal_name, "type": goal.goal_type, "completed": goal.completed}
+        for goal in goals
+    ]), 200
+
+                    
 @app.route('/leaderboard', methods=['GET'])
 def leaderboard():
     try:
@@ -605,73 +788,153 @@ def get_competitions():
 
 @app.before_request
 def seed_default_competitions():
-    default_competitions = [
-        {
-            "name": "Max Bench",
-            "description": "Test your max bench press strength.",
-            "visibility": "public",
-            "owner_id": 1,
-            "start_date": datetime.utcnow(),
-            "end_date": datetime.utcnow() + timedelta(days=30),
-            "awards": [
-                {"rank": 1, "reward": "$25 gift card"},
-                {"rank": 2, "reward": "$15 gift card"},
-                {"rank": 3, "reward": "$10 gift card"},
-            ],
-        },
-        {
-            "name": "Max Steps",
-            "description": "Track who takes the most steps.",
-            "visibility": "public",
-            "owner_id": 1,
-            "start_date": datetime.utcnow(),
-            "end_date": datetime.utcnow() + timedelta(days=15),
-            "awards": [
-                {"rank": 1, "reward": "Fitness Tracker"},
-                {"rank": 2, "reward": "$20 gift card"},
-                {"rank": 3, "reward": "Water Bottle"},
-            ],
-        },
-        {
-            "name": "Group X Class",
-            "description": "Join a group fitness competition.",
-            "visibility": "public",
-            "owner_id": 1,
-            "start_date": datetime.utcnow(),
-            "end_date": datetime.utcnow() + timedelta(days=45),
-            "awards": [
-                {"rank": 1, "reward": "Free Gym Membership"},
-                {"rank": 2, "reward": "$50 gift card"},
-                {"rank": 3, "reward": "Workout T-Shirt"},
-            ],
-        },
-    ]
+    from sqlalchemy.exc import IntegrityError
 
-    for comp_data in default_competitions:
-        existing_comp = Competition.query.filter_by(name=comp_data["name"]).first()
-        if not existing_comp:
-            new_comp = Competition(
-                name=comp_data["name"],
-                description=comp_data["description"],
-                visibility=comp_data["visibility"],
-                owner_id=comp_data["owner_id"],
-                date_created=datetime.utcnow(),
-                start_date=comp_data["start_date"],
-                end_date=comp_data["end_date"],
-            )
-            db.session.add(new_comp)
-            db.session.flush()  # Get the competition ID
+    try:
+        print("Starting seeding process for default competitions...")
+        default_competitions = [
+            {
+                "name": "Max Bench",
+                "description": "Test your max bench press strength.",
+                "visibility": "public",
+                "owner_id": 1,
+                "start_date": datetime.utcnow(),
+                "end_date": datetime.utcnow() + timedelta(days=30),
+                "awards": [
+                    {"rank": 1, "reward": "$25 gift card"},
+                    {"rank": 2, "reward": "$15 gift card"},
+                    {"rank": 3, "reward": "$10 gift card"},
+                ],
+            },
+            {
+                "name": "Max Steps",
+                "description": "Track who takes the most steps.",
+                "visibility": "public",
+                "owner_id": 1,
+                "start_date": datetime.utcnow(),
+                "end_date": datetime.utcnow() + timedelta(days=15),
+                "awards": [
+                    {"rank": 1, "reward": "Fitness Tracker"},
+                    {"rank": 2, "reward": "$20 gift card"},
+                    {"rank": 3, "reward": "Water Bottle"},
+                ],
+            },
+            {
+                "name": "Group X Class",
+                "description": "Join a group fitness competition.",
+                "visibility": "public",
+                "owner_id": 1,
+                "start_date": datetime.utcnow(),
+                "end_date": datetime.utcnow() + timedelta(days=45),
+                "awards": [
+                    {"rank": 1, "reward": "Free Gym Membership"},
+                    {"rank": 2, "reward": "$50 gift card"},
+                    {"rank": 3, "reward": "Workout T-Shirt"},
+                ],
+            },
+        ]
 
-            # Add associated awards
-            for award_data in comp_data["awards"]:
-                new_award = Award(
-                    competition_id=new_comp.id,
-                    rank=award_data["rank"],
-                    reward=award_data["reward"],
+        for comp_data in default_competitions:
+            try:
+                existing_comp = Competition.query.filter_by(name=comp_data["name"]).first()
+                if existing_comp:
+                    print(f"Competition '{comp_data['name']}' already exists. Skipping...")
+                    continue
+
+                print(f"Adding competition '{comp_data['name']}'...")
+                new_comp = Competition(
+                    name=comp_data["name"],
+                    description=comp_data["description"],
+                    visibility=comp_data["visibility"],
+                    owner_id=comp_data["owner_id"],
+                    date_created=datetime.utcnow(),
+                    start_date=comp_data["start_date"],
+                    end_date=comp_data["end_date"],
                 )
-                db.session.add(new_award)
+                db.session.add(new_comp)
+                db.session.flush()  # Get the competition ID for awards
 
-    db.session.commit()
+                # Add associated awards
+                for award_data in comp_data["awards"]:
+                    new_award = Award(
+                        competition_id=new_comp.id,
+                        rank=award_data["rank"],
+                        reward=award_data["reward"],
+                    )
+                    db.session.add(new_award)
+                print(f"Competition '{comp_data['name']}' added successfully.")
+            except IntegrityError as e:
+                print(f"IntegrityError while adding competition '{comp_data['name']}': {e}")
+                db.session.rollback()
+
+        db.session.commit()
+        print("Seeding process for default competitions completed successfully.")
+    except Exception as e:
+        print(f"Unexpected error during seeding: {e}")
+
+
+@app.before_request
+def seed_default_graphing_data():
+    try:
+        print("Starting seeding process for default graphing data...")
+
+        # Ensure a default user exists
+        try:
+            print("Checking if the default user exists...")
+            default_user = User.query.filter_by(id=1).first()
+            if not default_user:
+                print("Default user not found. Creating a new user...")
+                default_user = User(
+                    id=1,
+                    username="testuser",
+                    email="testuser@example.com",
+                    password="securepassword",
+                    role="user",
+                )
+                db.session.add(default_user)
+                db.session.commit()  # Commit to assign the user an ID if necessary
+                print("Default user created successfully.")
+            else:
+                print("Default user already exists.")
+        except Exception as e:
+            print(f"Error checking/creating default user: {e}")
+
+        # Default data for GraphingData
+        default_graphing_data = [
+            {"user_id": 1, "graph_type": "Body Weight", "values": [0, 0, 0, 0, 0, 0, 0]},
+            {"user_id": 1, "graph_type": "Workout Duration", "values": [0, 0, 0, 0, 0, 0, 0]},
+        ]
+
+        for data in default_graphing_data:
+            try:
+                print(f"Checking if data exists for graph_type: {data['graph_type']}...")
+                existing_data = GraphingData.query.filter_by(
+                    user_id=data["user_id"], graph_type=data["graph_type"]
+                ).first()
+
+                if not existing_data:
+                    print(f"No existing data found for {data['graph_type']}. Adding new entry...")
+                    new_data = GraphingData(
+                        user_id=data["user_id"],
+                        graph_type=data["graph_type"],
+                        values=data["values"],
+                    )
+                    db.session.add(new_data)
+                    print(f"Added new data: {data}")
+                else:
+                    print(f"Data already exists for {data['graph_type']}. Skipping...")
+            except Exception as e:
+                print(f"Error processing data for {data['graph_type']}: {e}")
+
+        try:
+            db.session.commit()  # Commit changes to the database
+            print("All changes committed successfully.")
+        except Exception as e:
+            print(f"Error committing changes to the database: {e}")
+
+        print("Default graphing data seeding process completed.")
+    except Exception as e:
+        print(f"Unexpected error in the seeding process: {e}")
 
 
 @app.route('/awards', methods=['GET'])
@@ -907,7 +1170,36 @@ print(db.inspect(user_friends).columns.keys())
 print(db.inspect(user_workouts).columns.keys())  
 
 
-print(db.inspect(User).columns.keys())  
+print(db.inspect(User).columns.keys())
+
+def initialize_database():
+    with app.app_context():
+        try:
+            db.create_all()
+            default_user = User.query.filter_by(id=1).first()
+            if not default_user:
+                default_user = User(id=1, username="testuser", email="testuser@example.com", password="password", role="user")
+                db.session.add(default_user)
+                print("Default user added.")
+
+            default_data = [
+                {"user_id": 1, "graph_type": "Body Weight", "values": [0, 0, 0, 0, 0, 0, 0]},
+                {"user_id": 1, "graph_type": "Workout Duration", "values": [0, 0, 0, 0, 0, 0, 0]},
+            ]
+
+            for entry in default_data:
+                existing_data = GraphingData.query.filter_by(user_id=entry["user_id"], graph_type=entry["graph_type"]).first()
+                if not existing_data:
+                    graph_data = GraphingData(**entry)
+                    db.session.add(graph_data)
+                    print(f"Added: {entry}")
+
+            db.session.commit()
+            print("Database initialized and data committed.")
+        except Exception as e:
+            print(f"Error initializing database: {e}")
+
+
 if __name__ == '__main__':
-    db.create_all()  
+    db.create_all()
     app.run(debug=True)
