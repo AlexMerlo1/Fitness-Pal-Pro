@@ -277,6 +277,51 @@ def add_friend():
         print(traceback.format_exc())
         return jsonify({"message": "Internal server error"}), 500
 @app.route('/get_workout_log', methods=['GET'])
+
+@app.route('/friends_goals', methods=['GET'])
+def get_friends_goals():
+    try:
+        user_id = request.args.get('user_id')
+        if not user_id:
+            return jsonify({"message": "User ID is required!"}), 400
+
+        # Get the current user's username
+        current_user = User.query.filter_by(id=user_id).first()
+        if not current_user:
+            return jsonify({"message": "User not found!"}), 404
+        current_username = current_user.username
+
+        # Fetch friends (both directions)
+        friends = db.session.query(User.username).filter(
+            (user_friends.user_id == current_username) & (user_friends.status == "Accepted")
+        ).union(
+            db.session.query(User.username).filter(
+                (user_friends.friend_id == current_username) & (user_friends.status == "Accepted")
+            )
+        ).all()
+
+        friend_usernames = [friend[0] for friend in friends]
+
+        # Fetch goals for all friends
+        friend_goals = []
+        for friend_username in friend_usernames:
+            friend = User.query.filter_by(username=friend_username).first()
+            if friend:
+                goals = UserGoal.query.filter_by(user_id=friend.id).all()
+                for goal in goals:
+                    friend_goals.append({
+                        "friend_username": friend.username,
+                        "goal_name": goal.goal_name,
+                        "goal_type": goal.goal_type,
+                        "progress": goal.progress,
+                        "completed": goal.completed
+                    })
+
+        return jsonify(friend_goals), 200
+    except Exception as e:
+        print(f"Error fetching friends' goals: {e}")
+        return jsonify({"message": "Failed to fetch friends' goals", "error": str(e)}), 500
+        
 def get_workout_log():
     try:
         user_id = get_jwt_token(request)
