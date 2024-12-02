@@ -1,0 +1,31 @@
+.Profile-container {
+    width: 100%;
+  height: 100vh;
+  background-color: var(--darkgray); 
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+    align-items: center;
+}
+
+.Profile-icon {
+    width: 200px;
+    height: 200px;
+    background-color: #c4c4c4;
+    background-image: url("./src/assets/profile-icon-png-898.png");
+    background-position: center;
+    background-size: 200px 200px;
+    border-radius: 50%;
+    cursor: pointer;
+} 
+
+.logout {
+    cursor: pointer;
+    background-color: var(--offgray);
+    border-radius: 20px;
+    font-size: 30px;
+    padding: 20px;
+    text-align: center;
+    margin: auto;
+    margin-top: 0;
+  }

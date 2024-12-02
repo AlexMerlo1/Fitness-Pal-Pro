@@ -45,7 +45,7 @@ body {
 .Workouts-logo-button, .Comp-logo-button, .Milestones-logo-button, .Pofile-logo-button {
   width: 200px;
   height: 200px;
-  background-image: url("/Users/benbraniff/Documents/GitHub/Fitness-Pal-Pro/frontend/src/assets/Fitness Pal Pro logo 2.png");
+  background-image: url("./src/assets/Fitness Pal Pro logo 2.png");
   background-position: center;
   background-size: 200px 200px;
   background-color: var(--yellow);
@@ -57,19 +57,19 @@ body {
 }
 
 .Workouts-logo-button {
-  background-image: url("/Users/benbraniff/Documents/GitHub/Fitness-Pal-Pro/frontend/src/assets/workouts logo 1.png");
+  background-image: url("./src/assets/workouts logo 1.png");
   margin-left: 20px;
 
 }
 .Milestones-logo-button {
-  background-image: url("/Users/benbraniff/Documents/GitHub/Fitness-Pal-Pro/frontend/src/assets/milestones logo.png");
+  background-image: url("./src/assets/milestones logo.png");
   margin-left: 20px;
 
 }
 
 .Pofile-logo-button {
   background-color: var(--offwhite);
-  background-image: url("/Users/benbraniff/Documents/GitHub/Fitness-Pal-Pro/frontend/src/assets/profile-icon-png-898.png");
+  background-image: url("./src/assets/profile-icon-png-898.png");
   margin-left: 20px;
 
 }

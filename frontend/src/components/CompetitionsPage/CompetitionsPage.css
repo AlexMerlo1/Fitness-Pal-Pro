@@ -46,6 +46,23 @@ body {
   font-size: 25px;;
 }
 
+.Comp-search-bar {
+  padding: 10px;
+  background-color: #8b8b8b;
+  border-radius: 20px;
+  margin: 10px;
+  font-size: 25px;
+  border: none; /* Remove default border */
+  outline: none; /* Remove focus outline */
+  width: 100%; /* Optional: Make the input stretch full width */
+  box-sizing: border-box; /* Ensure padding doesn't affect width */
+  color: white;
+}
+.Comp-search-bar::placeholder {
+  color: rgb(255, 255, 255);
+  opacity: 0.4;
+}
+
 .competition-cards {
   display: grid;
   gap: 10px;

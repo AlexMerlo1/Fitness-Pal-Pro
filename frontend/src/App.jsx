@@ -5,9 +5,10 @@ import RegisterForm from './components/RegisterForm/RegisterForm';
 import Workouts from './components/WorkoutsPage/Workouts';
 import Milestones from './components/MilestonesPage/Milestones';
 import HomePage from './components/HomePage/HomePage';
-import ProfilePage from './components/ProfilePage/Profile';
+import FriendProfilePage from './components/HomePage/components/FriendCard/FriendProfilePage';
 import FriendsPage from './components/FriendsPage/Friends';
 import CompetitionsPage from './components/CompetitionsPage/CompetitionsPage';
+import ProfilePage from './components/ProfilePage/Profile'
 const App = () => {
     return (
         <>
@@ -16,13 +17,13 @@ const App = () => {
                     <Route path="/login" element={<LoginForm />} />
                     <Route path="/" element={<RegisterForm />} />
                     <Route path="/register" element={<RegisterForm />} />
-                    
                     <Route path="/Home" element={<HomePage />} />
                     <Route path="/Workouts" element={<Workouts />} />
                     <Route path="/Competitions" element={<CompetitionsPage />} />
                     <Route path="/Milestones" element={<Milestones />} />
                     <Route path="/Friends" element={<FriendsPage />} />
                     <Route path="/Profile" element={<ProfilePage />} />
+                    <Route path="/profile/:friendId" element={<FriendProfilePage />} />
                 </Routes>
             </Router>
         </>

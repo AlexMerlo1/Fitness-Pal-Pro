@@ -27,7 +27,7 @@ const FriendsPopup = ({ onClose }) => {
   // Fetch friends when the search term changes
   useEffect(() => {
     if (searchTerm.trim() === '') {
-      setFriends([]); // Clear friends if search term is empty
+      setFriends([]); 
       return;
     }
     
@@ -37,9 +37,9 @@ const FriendsPopup = ({ onClose }) => {
         const response = await fetch(`http://localhost:5000/search_friends?search=${searchTerm}`);
         const data = await response.json();
         if (response.ok) {
-          setFriends(data.friends); // Update friends list with search results
+          setFriends(data.friends); 
         } else {
-          console.error(data.message); // Handle errors if needed
+          console.error(data.message); 
         }
       } catch (error) {
         console.error('Error fetching friends:', error);
@@ -69,7 +69,7 @@ const FriendsPopup = ({ onClose }) => {
     <div className='popup-overlay' onClick={handleOverlayClick}>
       <div className='popup-container'>
         <div className='header'>
-          <h2>Your Friends <br />{friends.length} Friends</h2>
+          <h2> <br />{friends.length} Friends</h2>
           <input 
             type="text" 
             placeholder="Search..." 

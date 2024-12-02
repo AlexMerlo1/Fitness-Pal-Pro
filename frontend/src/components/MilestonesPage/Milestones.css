@@ -1,6 +1,5 @@
 .goals-container {
   width: 100%;
-  display: grid;
   position: relative;
   /* background-color: #1F262E; */
   height: 100vh;
@@ -82,7 +81,6 @@
   flex-grow: 1;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  height: 100%;
 }
 
 .goals-div {
@@ -95,7 +93,7 @@
 .graph-div {
   border-radius: 20px;
   margin: 20px;
-  margin-bottom:0px;
+  margin-bottom:20px;
   padding: 20px;
   padding-bottom: 0px;
   background-color: var(--lightgray);
@@ -109,4 +107,20 @@
   margin:10px;
   margin-left: auto;
   cursor: pointer;
+}
+
+.data-button {
+  background-color: #b1b1b1;
+  color: #ffffff;
+  width: 250px;
+  height: 80px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  position: relative;
+  font-size: 18px;
+  margin:auto;
+  margin-top:20px;
+  margin-bottom:20px;
 }

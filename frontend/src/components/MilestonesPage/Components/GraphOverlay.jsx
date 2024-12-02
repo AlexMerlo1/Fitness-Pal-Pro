@@ -29,21 +29,21 @@ const BarGraphOverlay = ({ onClose, data, options }) => {
     }
   };
 
-  const handleKeyDown = (e) => {
-    if (e.key === 'Escape') {
-      onClose();
-    }
-  };
-
-  useEffect(() => {
-    // Attach keydown event listener
-    document.addEventListener('keydown', handleKeyDown);
-
-    // Cleanup the event listener when the component unmounts
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
     };
-  }, []);
+
+    useEffect(() => {
+      // Attach keydown event listener
+      document.addEventListener('keydown', handleKeyDown);
+
+      // Cleanup the event listener when the component unmounts
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+      };
+    }, []);
 
   return (
     <div className="graph-overlay" onClick={handleOverlayClick}>
@@ -57,7 +57,7 @@ const BarGraphOverlay = ({ onClose, data, options }) => {
           backgroundColor: '#38434f',
         }}
       >
-        Test Title
+        {/* {data?.datasets[0]?.label || 'Graph Title'} */}
         <Bar data={data} options={options} />
         <button className="close-button" onClick={onClose}>
           <FaArrowLeft />

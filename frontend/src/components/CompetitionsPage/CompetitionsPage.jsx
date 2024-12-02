@@ -16,19 +16,11 @@ const CompetitionsPage2 = () => {
 
         <div class="comp-info">
             <div className="Search-div">
-                <div className="Search-bar">Search|</div>
+                <input className="Comp-search-bar" type="text" placeholder="Search Competitions"/>
                 <div class="competition-cards">
                     <button class="competition-card">Max Bench</button>
                     <button class="competition-card">Max Steps</button>
                     <button class="competition-card">Max Steps</button>
-                    <button class="competition-card">Group X Class</button>
-                    <button class="competition-card">Group X Class</button>
-                    <button class="competition-card">Group X Class</button>
-                    <button class="competition-card">Group X Class</button>
-                    <button class="competition-card">Group X Class</button>
-                    <button class="competition-card">Group X Class</button>
-                    <button class="competition-card">Group X Class</button>
-                    <button class="competition-card">Group X Class</button>
                     <button class="competition-card">Group X Class</button>
                 </div>
             </div>
@@ -67,42 +59,6 @@ const CompetitionsPage2 = () => {
                             <td>Max</td>
                         </tr>
                     </table>
-                </div>
-                <div class="rewards">
-                    <h3>Rewards</h3>
-                    <table class="table">
-                        <tr>
-                            <th>1.</th>
-                            <td>$25 gift card</td>
-                        </tr>
-                        <tr>
-                            <th>2.</th>
-                            <td>$15 gift card</td>
-                        </tr>
-                        <tr>
-                            <th>3.</th>
-                            <td>$10 gift card</td>
-                        </tr>
-                    </table>
-                    <p>30 fit cash for all</p>
-                </div>
-                <div class="rewards">
-                    <h3>Rewards</h3>
-                    <table class="table">
-                        <tr>
-                            <th>1.</th>
-                            <td>$25 gift card</td>
-                        </tr>
-                        <tr>
-                            <th>2.</th>
-                            <td>$15 gift card</td>
-                        </tr>
-                        <tr>
-                            <th>3.</th>
-                            <td>$10 gift card</td>
-                        </tr>
-                    </table>
-                    <p>30 fit cash for all</p>
                 </div>
                 <div class="rewards">
                     <h3>Rewards</h3>
