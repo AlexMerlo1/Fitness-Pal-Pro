@@ -41,8 +41,13 @@ const LoginForm = () => {
         setPassword(''); // Clear password field
 
         // Store the token in localStorage
+        localStorage.clear();
+        console.log('API Response:', data);    
         localStorage.setItem('token', data.token);
-
+        //localStorage.setItem('token', data.token);
+        localStorage.setItem('user_id', data.user_id);
+        localStorage.setItem('userID', data.user_id);
+        
         // Redirect to home page
         navigate('/home');
       } else {

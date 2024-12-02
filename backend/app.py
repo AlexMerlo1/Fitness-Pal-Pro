@@ -86,6 +86,18 @@ class Award(db.Model):
 
     competition = db.relationship('Competition', backref='awards', lazy=True)
 
+class UserCompetition(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    competition_id = db.Column(db.Integer, db.ForeignKey('competition.id'), nullable=False)
+    performance = db.Column(db.Float, nullable=False)
+    date_joined = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relationships
+    user = db.relationship('User', backref='user_competitions', lazy=True)
+    competition = db.relationship('Competition', backref='user_competitions', lazy=True)
+
+
 def get_jwt_token(request):
     # Extract the JWT token from the Authorization header
     token = request.headers.get('Authorization')
@@ -468,27 +480,38 @@ def create_competition():
         end_date = data.get('end_date')
         awards = data.get('awards', [])
 
+        # Validate required fields
         if not user_id or not name or not start_date or not end_date:
             return jsonify({"message": "Missing required fields!"}), 400
 
+        # Ensure dates are in correct format
+        try:
+            start_date = datetime.fromisoformat(start_date)
+            end_date = datetime.fromisoformat(end_date)
+        except ValueError:
+            return jsonify({"message": "Invalid date format. Use ISO 8601 (YYYY-MM-DD)."}), 400
+
+        # Create competition
         new_competition = Competition(
             name=name,
             description=description,
             visibility=visibility,
             owner_id=user_id,
-            start_date=datetime.fromisoformat(start_date),
-            end_date=datetime.fromisoformat(end_date),
+            start_date=start_date,
+            end_date=end_date,
         )
         db.session.add(new_competition)
         db.session.commit()
 
+        # Add awards
         for award in awards:
-            new_award = Award(
-                competition_id=new_competition.id,
-                rank=award['rank'],
-                reward=award['reward'],
-            )
-            db.session.add(new_award)
+            if 'rank' in award and 'reward' in award:
+                new_award = Award(
+                    competition_id=new_competition.id,
+                    rank=award['rank'],
+                    reward=award['reward'],
+                )
+                db.session.add(new_award)
 
         db.session.commit()
         return jsonify({"message": "Competition created successfully!"}), 201
@@ -496,6 +519,7 @@ def create_competition():
         db.session.rollback()
         print(f"Error creating competition: {e}")
         return jsonify({"message": "Failed to create competition", "error": str(e)}), 500
+
 @app.route('/user_competitions_log', methods=['GET'])
 def user_competitions_log():
     user_id = request.args.get('user_id')
@@ -757,14 +781,33 @@ def login():
             'user_id': user.id,
             'exp': datetime.utcnow() + timedelta(hours=2)  # Token expires in 2 hour
         }, app.config['SECRET_KEY'], algorithm='HS256')
+        print({
+            'message': 'Login successful!',
+            'token': token,
+            'user': {
+                'id': user.id,
+                'email': user.email,
+                'role': user.role,
+                'date_created': user.date_created
+            }
+        })
+
         return jsonify({
             'message': 'Login successful!',
-            'token': token
+            'token': token,
+            'user_id' : user.id,
+            'user': {
+                'id': user.id,
+                'email': user.email,
+                'role': user.role,
+                'date_created': user.date_created
+            }
         }), 200
     except Exception as e:
         print(f"Error during login: {e}")
         print(traceback.format_exc()) 
         return jsonify({"message": "Internal server error", "error": str(e)}), 500
+        
 def get_ordinal_suffix(day):
     if 10 <= day <= 20:  
         suffix = 'th'
