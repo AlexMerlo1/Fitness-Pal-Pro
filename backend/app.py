@@ -46,6 +46,25 @@ class user_workouts(db.Model):
     reps = db.Column(db.Integer, nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow)
 
+class Competition(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False, unique=True)
+    description = db.Column(db.String, nullable=True)
+    visibility = db.Column(db.String, default='public')  # 'public' or 'private'
+    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    date_created = db.Column(db.DateTime, default=datetime.utcnow)
+    start_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    end_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow() + timedelta(days=30))
+    owner = db.relationship('User', backref='owned_competitions', lazy=True)
+
+class Award(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    competition_id = db.Column(db.Integer, db.ForeignKey('competition.id'), nullable=False)
+    rank = db.Column(db.Integer, nullable=False)
+    reward = db.Column(db.String, nullable=False)
+
+    competition = db.relationship('Competition', backref='awards', lazy=True)
+
 def get_jwt_token(request):
     # Extract the JWT token from the Authorization header
     token = request.headers.get('Authorization')
