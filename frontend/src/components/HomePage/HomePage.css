@@ -34,11 +34,8 @@ body {
 .Competitions-Button-big, 
 .Milestones-Button-big, 
 .Profile-Button-big {
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-right:20px;
-  margin-left:20px;
-  padding: 20px;
+  margin: 30px;
+  padding: auto;
   border-radius: 20px;
   background-color: var(--lightgray);
   display: flex;
@@ -108,6 +105,7 @@ body {
   margin: 10px;
   margin-left: auto;
   margin-right: auto;
+  height: 100px;
 
 }
 
