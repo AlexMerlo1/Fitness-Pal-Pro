@@ -71,6 +71,7 @@ const FriendsPopup = ({ onClose }) => {
         <div className='header'>
           <h2> <br />{friends.length} Friends</h2>
           <input 
+            className="Search-input"
             type="text" 
             placeholder="Search..." 
             value={searchTerm} 

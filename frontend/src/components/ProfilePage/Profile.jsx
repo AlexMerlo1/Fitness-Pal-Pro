@@ -3,15 +3,22 @@ import './Profile.css';
 import TopBar from '../TopBar/TopBar.jsx';
 import { FaArrowRight } from 'react-icons/fa';
 
-const Profile = () => {
+const ProfilePage = () => {
 
+  const Logout = () => {
+
+  }
 
   return (
-    <div className='goals-container'>
-      <TopBar profileClass="ActiveProfile"/>
-      <h1>This is The Profile Page</h1>
+    <div className='profile-page-container'>
+        <TopBar profileClass="ActiveProfile"/>
+        <div className="profile-main">
+          <div className="profile-photo"></div>
+          <h1>Logged in as BenBraniff</h1>
+          <div className='logout-button' onClick={Logout}>Log Out</div>
+        </div>
     </div>
   );
 };
 
-export default Profile;
+export default ProfilePage;

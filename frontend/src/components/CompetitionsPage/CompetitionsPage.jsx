@@ -239,7 +239,7 @@ const CompetitionsPage = () => {
       {/* Competitions Display */}
       <div className="comp-info">
         <div className="Search-div">
-          <div className="Search-bar">Competitions|</div>
+          <input className="Search-bar" placeholder="Competitions"></input>
           <div className="competition-cards">
             {competitions.map((competition) => (
               <button

@@ -20,7 +20,6 @@ body {
   width: 100%;
   height: 100vh;
   background-color: var(--darkgray);
-  padding: 20px;
 }
 
 .create-comp-btn {
@@ -254,10 +253,15 @@ td {
 
 .Search-bar {
   padding: 10px;
-  background-color: var(--offgray);
+  background-color: #b4b4b4;
   border-radius: 20px;
   margin:10px;
-  font-size: 25px;;
+  font-size: 25px;
+  border: none;
+}
+
+.Search-bar::placeholder {
+  color: #5c5c5c;
 }
 
 .competition-header {
