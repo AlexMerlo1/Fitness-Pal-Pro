@@ -102,8 +102,10 @@ const HomePage = () => {
           <div className="Pofile-logo-button" onClick={openProfilePage}></div>
           <div className="Profile-name-div">
             <div className="Profile-button-name" onClick={openProfilePage}>Profile</div>
-            <div className="view-friends" onClick={toggleFriendsPopup}>View Friends</div>
-            <div className='view-friends' onClick={toggleNotificationsPopup}>Alexs Notifications</div>
+            <div className='profile-button-holder'>
+              <div className="view-friends" onClick={toggleFriendsPopup}>View Friends</div>
+              <div className='view-friends' onClick={toggleNotificationsPopup}>Notifications</div>
+            </div>
           </div>
         </div>
       </div>

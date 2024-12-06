@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './NotificationPopup.css';
 import Notification from './Notification'; 
+import { FaArrowLeft } from 'react-icons/fa';
+
 
 const NotificationsPopup = ({ onClose }) => {
   const [notifications, setNotifications] = useState([]);
@@ -99,6 +101,7 @@ const NotificationsPopup = ({ onClose }) => {
     <div className="notifications-popup-container">
       <div className="notifications-popup" ref={popupRef}>
         <button className="close-button" onClick={onClose}>✖</button>
+        <button className='close-button' onClick={onClose}><FaArrowLeft /></button>
         <h3>Notifications</h3>
 
         {loading && !error ? (

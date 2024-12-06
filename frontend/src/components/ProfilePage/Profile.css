@@ -1,0 +1,36 @@
+.profile-main {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px;
+}
+
+.profile-main h1 {
+    margin: auto;
+}
+
+.profile-photo {
+    width: 200px;
+    height: 200px;
+    background-position: center;
+    background-size: 200px 200px;
+    border-radius: 50%;
+    cursor: pointer;
+    margin: auto;
+    justify-content: center;
+    vertical-align: middle;
+    background-color: var(--offwhite);
+    background-image: url("./src/assets/profile-icon-png-898.png");
+}
+
+.logout-button {
+    cursor: pointer;
+    background-color: var(--offgray);
+    border-radius: 20px;
+    font-size: 30px;
+    padding: 20px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+  }
