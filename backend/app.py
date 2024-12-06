@@ -277,6 +277,43 @@ def add_friend():
         print(traceback.format_exc())
         return jsonify({"message": "Internal server error"}), 500
 @app.route('/get_workout_log', methods=['GET'])
+def get_workout_log():
+    try:
+        # Extract user_id from JWT token
+        user_id = get_jwt_token(request)
+
+        # Retrieve the user details based on user_id
+        user = User.query.get(user_id)
+        print(user_id)
+        if not user:
+            return jsonify({"message": "User not found!"}), 404
+
+        # Retrieve the user's workouts from the database
+        workouts = user_workouts.query.filter_by(created_by=user_id).order_by(desc(user_workouts.date_created)).all()
+
+        # Prepare the workout log
+        workout_log = []
+        for workout in workouts:
+            workout_data = {
+                "workout_name": workout.workout_name,
+                "sets": workout.sets or 0,
+                "reps": workout.reps or 0,
+                "weight": workout.weight or 0.0,
+                "date_created": workout.date_created.isoformat() if workout.date_created else None
+            }
+            workout_log.append(workout_data)
+
+        # Return the workout log
+        return jsonify({"workouts": workout_log}), 200
+
+    except AttributeError as attr_err:
+        print(f"Attribute error: {attr_err}")
+        return jsonify({"message": "Data processing error"}), 500
+
+    except Exception as e:
+        # Catch any other general exceptions
+        print(f"Error fetching workout log: {e}")
+        return jsonify({"message": "Internal server error", "error": str(e)}), 500
 
 @app.route('/friends_goals', methods=['GET'])
 def get_friends_goals():
@@ -883,7 +920,6 @@ def seed_default_competitions():
             try:
                 existing_comp = Competition.query.filter_by(name=comp_data["name"]).first()
                 if existing_comp:
-                    print(f"Competition '{comp_data['name']}' already exists. Skipping...")
                     continue
 
                 print(f"Adding competition '{comp_data['name']}'...")
@@ -921,11 +957,8 @@ def seed_default_competitions():
 @app.before_request
 def seed_default_graphing_data():
     try:
-        print("Starting seeding process for default graphing data...")
-
         # Ensure a default user exists
         try:
-            print("Checking if the default user exists...")
             default_user = User.query.filter_by(id=1).first()
             if not default_user:
                 print("Default user not found. Creating a new user...")
@@ -965,7 +998,6 @@ def seed_default_graphing_data():
                         values=data["values"],
                     )
                     db.session.add(new_data)
-                    print(f"Added new data: {data}")
                 else:
                     print(f"Data already exists for {data['graph_type']}. Skipping...")
             except Exception as e:
@@ -1036,34 +1068,6 @@ def update_performance():
         print(f"Error updating performance: {e}")
         return jsonify({"message": "Failed to update performance", "error": str(e)}), 500
 
-@app.route('/get_workouts', methods=['GET'])
-def get_workouts():
-    try:
-        user_id = request.args.get('user_id')
-        if not user_id:
-            return jsonify({"message": "User ID is required!"}), 400
-
-        # Prebuilt workouts
-        prebuilt_workouts = [
-            {"id": 1, "name": "Bench Press", "sets": 3, "reps": 10, "weight": 135},
-            {"id": 2, "name": "Squats", "sets": 3, "reps": 12, "weight": 185},
-            {"id": 3, "name": "Deadlift", "sets": 4, "reps": 8, "weight": 225},
-        ]
-
-        # Custom workouts for the user
-        custom_workouts = CustomWorkout.query.filter_by(user_id=user_id).all()
-        custom_workouts_data = [
-            {"id": cw.id, "name": cw.name, "sets": cw.sets, "reps": cw.reps, "weight": cw.weight}
-            for cw in custom_workouts
-        ]
-
-        return jsonify({"prebuilt": prebuilt_workouts, "custom": custom_workouts_data}), 200
-    except Exception as e:
-        print(f"Error fetching workouts: {e}")
-        return jsonify({"message": "Failed to fetch workouts", "error": str(e)}), 500
-
-
-
 
 @app.route('/leaderboard_goal', methods=['GET'])
 def get_leaderboard():
@@ -1127,7 +1131,6 @@ def get_ordinal_suffix(day):
 def get_profile(friend_id):
     try:
         # Query the User table to find the user with the given username
-        print(f"Fetching profile for {friend_id}")
         user = User.query.filter_by(username=friend_id).first()
         
         # Check if the user exists
@@ -1141,11 +1144,9 @@ def get_profile(friend_id):
         ).count()
         
         # Query the latest workouts (limit to last 5 workouts ordered by date)
-        print(user.id)
         latest_workouts = user_workouts.query.filter_by(created_by=user.id) \
             .order_by(user_workouts.date_created.desc()) \
             .limit(5).all()
-        # Format workouts for JSON response
         workouts_data = [
             {
                 "workout_name": workout.workout_name,
@@ -1180,7 +1181,6 @@ def create_custom_workout():
         
         # Get the workout data from the request
         data = request.get_json()
-        print(f"Received data: {data}")
         
         if not data:
             return jsonify({"message": "No data provided!"}), 400
@@ -1192,7 +1192,7 @@ def create_custom_workout():
         
         # Create the new workout object
         new_workout = user_workouts(
-            created_by=created_by,  # This should be the user ID
+            created_by=created_by, 
             workout_name=workout_name,
             sets=sets,
             reps=reps,
@@ -1211,11 +1211,6 @@ def create_custom_workout():
         return jsonify({"message": "Internal server error", "error": str(e)}), 500
 
 from app import db, user_friends
-print(db.inspect(user_friends).columns.keys())  
-print(db.inspect(user_workouts).columns.keys())  
-
-
-print(db.inspect(User).columns.keys())
 
 def initialize_database():
     with app.app_context():
@@ -1237,7 +1232,6 @@ def initialize_database():
                 if not existing_data:
                     graph_data = GraphingData(**entry)
                     db.session.add(graph_data)
-                    print(f"Added: {entry}")
 
             db.session.commit()
             print("Database initialized and data committed.")
